@@ -1,0 +1,79 @@
+<h1 id="secondary-printer-tuning">Secondary Printer Tuning</h1>
+
+<p>Tuning steps and processes after everything is working.</p>
+
+<h2 id="gantry-racking">Gantry Racking</h2>
+
+<p>Check out <a href="https://www.youtube.com/watch?v=cOn6u9kXvy0">Nero’s video on gantry racking</a></p>
+
+<h2 id="belt-tension">Belt Tension</h2>
+
+<ol>
+  <li>Move your gantry so the side belts from the front idlers to the XY joints are separated center to center 150mm</li>
+  <li>Adjust tension evenly on both A and B belts until the lowest frequency in your plot registers approximately 110Hz</li>
+</ol>
+
+<p>This value equals ~2lb of tension on XY, which is on the lower end of the range but should be a good initial setting (without stretching your belts too tight). The phone app I am using is called Sound Spectrum Analysis on iOS, the image below shows the output (not of my belts).</p>
+
+<p><a href="./images/belt-tension.mov?raw=true">Watch this video</a></p>
+
+<p><img src="./images/sound-spectrum-belt.jpg" alt="" /></p>
+
+<h2 id="bed-mesh-legacy-trident-24">Bed Mesh (Legacy, Trident, 2.4)</h2>
+
+<p>Generally when your Voron is first built, Bed Mesh is not necessary. However, it can still be used as an analysis tool to check assembly and see if there’s anything obviously incorrect–just don’t run SAVE_CONFIG at the end of your BED_MESH_CALIBRATE, and run BED_MESH_CLEAR after running bed mesh.</p>
+
+<p>The [bed_mesh] configuration options can be found <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Bed_Mesh.md">on the Klipper website</a> described in detail. A sample configuration for your Voron printer can be found <a href="https://github.com/VoronDesign/Voron-1/blob/328113babcdb4934c461beb82b7f3b4dbeeb7eb5/Firmware/klipper_configurations/SKR_1.4/Voron_1_SKR_14_Config.cfg#L464">here</a>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">bed_mesh</span><span class="p">]</span>
+<span class="n">speed</span><span class="p">:</span> <span class="mi">300</span>
+<span class="n">horizontal_move_z</span><span class="p">:</span> <span class="mi">10</span>
+<span class="c1">##--------------------------------------------------------------------
+##	Uncomment below for 250mm build
+#mesh_min: 40, 40
+#mesh_max: 210,210
+</span>
+<span class="c1">##	Uncomment for 300mm build
+#mesh_min: 40, 40
+#mesh_max: 260,260
+</span>
+<span class="c1">##	Uncomment for 350mm build
+#mesh_min: 40, 40
+#mesh_max: 310,310
+##--------------------------------------------------------------------
+</span><span class="n">fade_start</span><span class="p">:</span> <span class="mf">0.6</span>
+<span class="n">fade_end</span><span class="p">:</span> <span class="mf">10.0</span>
+<span class="n">probe_count</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span><span class="mi">5</span>
+<span class="n">algorithm</span><span class="p">:</span> <span class="n">bicubic</span>
+<span class="n">relative_reference_index</span><span class="p">:</span> <span class="mi">12</span>
+</code></pre></div></div>
+
+<p>Generally a 5x5 grid is acceptable for even the largest Voron printer, but you can adjust the points to be greater or less than that. It is recommended to use an odd value for numbers of points in X and Y, such as 3x3, 5x5, or 7x7, so that there is always a probe point in the center of your bed.</p>
+
+<p>As we use the probe as a relative and not absolute measurement device, <strong>it is critical that you have the <code class="language-plaintext highlighter-rouge">relative_reference_index</code> parameter</strong>. This value will change as you adjust your mesh size:</p>
+
+<p>relative_reference_index = ()(x points * y points) - 1) / 2</p>
+
+<p>3x3 mesh = 4</p>
+
+<p>5x5 mesh = 12</p>
+
+<p>7x7 mesh = 24, etc</p>
+
+<p>You should check your mesh before printing to make sure it sits around 0 on the z axis:</p>
+
+<p><img src="./images/heightmap.png" alt="" /></p>
+
+<h2 id="bed-mesh-switchwire">Bed Mesh (Switchwire)</h2>
+<p>Due to the the use of a thinner prusa-style bed on the switchwire, it will generally require the use of a bed mesh. It should not generally be necessary to make any major adjustments to the mesh configuration included in the stock configuration files, however, if you do wish to fine tune it, detailed information can be found <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Bed_Mesh.md">on the Klipper website</a>. Note that unlike other Voron models, the Switchwire uses the probe as a virtual endstop, and thus should NOT use <code class="language-plaintext highlighter-rouge">relative_reference_index</code>.</p>
+
+<p>To calibrate the mesh on your printer, it is important to check that your probe is correctly calibrated, using <code class="language-plaintext highlighter-rouge">PROBE_CALIBRATE</code>, and that your printer is homed (<code class="language-plaintext highlighter-rouge">G28</code>).  Next, run <code class="language-plaintext highlighter-rouge">BED_MESH_CALIBRATE</code> which will actually execute the probing process. Once this completes, you may wish to pause, and inspect the mesh using the visualizer functions built into fluidd/mainsail or the Bed Mesh Visualizer plugin for Octoprint.  Assuming the mesh looks plausible, you may now run <code class="language-plaintext highlighter-rouge">SAVE_CONFIG</code> to store the mesh permanently, and restart your printer.</p>
+
+<h2 id="input-shaper">Input Shaper</h2>
+
+<p>Input Shaper is a Klipper-specific software technique for reducing ringing (also known as echoing, ghosting or rippling) in prints.  See the Klipper guide on <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Resonance_Compensation.md">configuring Input Shaper</a> for more details and the complete process.</p>
+
+<h2 id="print-tuning">Print Tuning</h2>
+
+<p>Andrew Ellis’ <a href="https://github.com/AndrewEllis93/Print-Tuning-Guide">Print Tuning Guide</a>, covering print/printer tuning and troubleshooting, slicer tricks, macro tricks, and more.</p>
+

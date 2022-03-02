@@ -1,0 +1,103 @@
+<!--  -->
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Conditional G28 (home if not already homed)
+</span><span class="nn">[gcode_macro CG28]</span>
+<span class="err">gcode:</span>
+    <span class="err">{%</span> <span class="err">if</span> <span class="err">"x"</span> <span class="err">not</span> <span class="err">in</span> <span class="err">printer.toolhead.homed_axes</span> <span class="err">or</span> <span class="err">"y"</span> <span class="err">not</span> <span class="err">in</span> <span class="err">printer.toolhead.homed_axes</span> <span class="err">or</span> <span class="err">"z"</span> <span class="err">not</span> <span class="err">in</span> <span class="err">printer.toolhead.homed_axes</span> <span class="err">%}</span>
+    <span class="err">G28</span>
+    <span class="err">{%</span> <span class="err">endif</span> <span class="err">%}</span>
+
+<span class="nn">[gcode_macro M141]</span>
+<span class="err">default_parameter_S:</span> <span class="err">0</span>
+<span class="err">default_parameter_P:</span> <span class="err">0</span>
+<span class="err">gcode:</span>
+    <span class="err">SET_TEMPERATURE_FAN_TARGET</span> <span class="py">temperature_fan</span><span class="p">=</span><span class="s">"chamber"</span> <span class="s">target={S}</span>
+
+<span class="nn">[gcode_macro G32]</span>
+<span class="err">gcode:</span>
+    <span class="err">BED_MESH_CLEAR</span>
+    <span class="err">CG28</span>                      <span class="c">; Home if not homed to get everything turned on
+</span>    <span class="err">QUAD_GANTRY_LEVEL</span>         <span class="c">; Level
+</span>    <span class="c">#G28 X Y                  ; Home the X and Y
+</span>    <span class="err">G0</span> <span class="err">X130</span> <span class="err">Y355</span> <span class="err">Z2</span> <span class="err">F9000</span>     <span class="c">; Move to brush
+</span>    <span class="err">G0</span> <span class="err">X75</span> <span class="err">F750</span>               <span class="c">; Move across the brush
+</span>    <span class="err">G0</span> <span class="err">X130</span> <span class="err">F750</span>              <span class="c">; Move across the brush
+</span>    <span class="err">G28</span> <span class="err">Z</span>                     <span class="c">; Home the Z now that nozzle is clean
+</span>    <span class="err">G0</span> <span class="err">X175</span> <span class="err">Y175</span> <span class="err">Z20</span> <span class="err">F6000</span>    <span class="c">; Return to center of bed
+</span>
+<span class="nn">[gcode_macro PURGE_BUCKET]</span>
+<span class="err">gcode:</span>
+    <span class="err">SAVE_GCODE_STATE</span> <span class="py">NAME</span><span class="p">=</span><span class="s">PURGE</span>
+    <span class="err">G90</span>                    <span class="c">; absolute
+</span>    <span class="err">G0</span> <span class="err">X75</span> <span class="err">Y355</span> <span class="err">Z2</span>         <span class="c">; go to purge bucket
+</span>    <span class="err">G1</span> <span class="err">X25</span> <span class="err">E10</span> <span class="err">F500</span>        <span class="c">; purge some filament into bucket
+</span>    <span class="err">G1</span> <span class="err">X75</span> <span class="err">E3</span> <span class="err">F500</span>         <span class="c">; purge some filament into bucket
+</span>    <span class="err">G0</span> <span class="err">X120</span> <span class="err">Y355</span> <span class="err">F750</span>      <span class="c">; move across purge brush
+</span>    <span class="err">G1</span> <span class="err">E-2</span> <span class="err">F500</span>            <span class="c">; Retract a little
+</span>    <span class="err">G1</span> <span class="err">Z3</span>                  <span class="c">; Raise and return
+</span>    <span class="err">RESTORE_GCODE_STATE</span> <span class="py">NAME</span><span class="p">=</span><span class="s">PURGE</span>
+
+<span class="nn">[gcode_macro PRINT_START]</span>
+<span class="c">#   Use PRINT_START for the slicer starting script - please customise for your slicer of choice
+</span><span class="err">gcode:</span>
+<span class="c">#    default_parameter_BED: 60 #target bed temperature
+#    default_parameter_EXTRUDER: 210 #target extruder temperature
+</span>
+    <span class="err">SAVE_GCODE_STATE</span> <span class="py">NAME</span><span class="p">=</span><span class="s">start</span>
+
+    <span class="err">M117</span> <span class="err">Starting</span> <span class="err">warmup</span>
+    <span class="err">G1</span> <span class="err">Z20</span> <span class="err">F3000</span>                       <span class="c">; move nozzle away from bed
+</span>    <span class="err">M117</span> <span class="err">Warmup</span>
+    <span class="err">M190</span> <span class="err">S{BED}</span>                        <span class="c">; set bed temp and wait for it reach temp
+</span>    <span class="err">M109</span> <span class="err">S{EXTRUDER|int}</span>               <span class="c">; M109 heat and wait for it to reach temp
+</span>    <span class="err">G32</span>                                <span class="c">; Home XYZ and do QGL
+</span>
+    <span class="err">BED_MESH_PROFILE</span> <span class="py">LOAD</span><span class="p">=</span><span class="s">default</span>
+
+    <span class="err">G1</span> <span class="err">Z5</span> <span class="err">F5000</span>                        <span class="c">; move head 5mm from bed surface
+</span>    <span class="err">M83</span>                                <span class="c">; Make the E relative independant of other axis
+</span>    <span class="err">M117</span> <span class="err">Purging</span>
+    <span class="err">PURGE_BUCKET</span>
+    <span class="err">G1</span> <span class="err">E2</span> <span class="err">F1500</span> <span class="c"># unretract
+</span>    <span class="err">M117</span> <span class="err">Starting</span> <span class="err">Print</span>
+    <span class="err">RESTORE_GCODE_STATE</span> <span class="py">NAME</span><span class="p">=</span><span class="s">start</span>
+
+<span class="nn">[gcode_macro PRINT_END]</span>
+<span class="c">#   Use PRINT_END for the slicer ending script - please customise for your slicer of choice
+</span><span class="err">gcode:</span>
+    <span class="err">M400</span>                           <span class="c">; wait for buffer to clear
+</span>    <span class="err">G92</span> <span class="err">E0</span>                         <span class="c">; zero the extruder
+</span>    <span class="err">G1</span> <span class="err">E-10.0</span> <span class="err">F3600</span>                <span class="c">; retract filament
+</span>    <span class="err">G91</span>                            <span class="c">; relative positioning
+</span>    <span class="err">G0</span> <span class="err">Z1.00</span> <span class="err">X20.0</span> <span class="err">Y20.0</span> <span class="err">F20000</span>    <span class="c">; move nozzle to remove stringing
+</span>    <span class="err">TURN_OFF_HEATERS</span>
+    <span class="err">M107</span>                           <span class="c">; turn off fan
+</span>    <span class="err">G1</span> <span class="err">Z2</span> <span class="err">F3000</span>                    <span class="c">; move nozzle up 2mm
+</span>    <span class="err">G90</span>                            <span class="c">; absolute positioning
+</span>    <span class="err">G0</span> <span class="err">X125</span> <span class="err">Y250</span> <span class="err">F3600</span>            <span class="c">; park nozzle at rear
+</span>    <span class="err">BED_MESH_CLEAR</span>
+
+<span class="nn">[gcode_macro test_speed_fast]</span>
+<span class="err">gcode:</span>
+        <span class="err">G28</span> <span class="err">X0</span> <span class="err">Y0</span>
+        <span class="err">GET_POSITION</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y0</span>     <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y350</span> <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y0</span>     <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y350</span> <span class="err">F27000</span>
+
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y350</span> <span class="err">F36000</span>
+
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y0</span> <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y350</span> <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y0</span> <span class="err">F27000</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y350</span> <span class="err">F27000</span>
+
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y0</span> <span class="err">F36000</span>
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y0</span> <span class="err">F36000</span>
+        <span class="err">G1</span> <span class="err">X350</span> <span class="err">Y350</span> <span class="err">F36000</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y350</span> <span class="err">F36000</span>
+        <span class="err">G1</span> <span class="err">X0</span> <span class="err">Y0</span> <span class="err">F36000</span>
+        <span class="err">G28</span> <span class="err">X0</span> <span class="err">Y0</span>
+        <span class="err">GET_POSITION</span>
+</code></pre></div></div>
+<!--  -->

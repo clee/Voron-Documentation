@@ -1,0 +1,41 @@
+I"‰<h1 id="alternate-electronics">Alternate Electronics</h1>
+
+<p>Community-generated documentation for alternate (non-spec) electronics and related configurations..</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Guide Name / Link</th>
+      <th>Author</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="./brewweasel/BTTExpansion.md">BigTreeTech Expansion Module</a></td>
+      <td>BrewWeasel</td>
+    </tr>
+    <tr>
+      <td><a href="./120decibell/filament_runout_sensor.md">Filament Runout Sensor</a></td>
+      <td>120decibell</td>
+    </tr>
+    <tr>
+      <td><a href="./120decibell/hall_effect_endstop_setup.md">Hall Effect Endstop Setup</a></td>
+      <td>120decibell</td>
+    </tr>
+    <tr>
+      <td><a href="./xbst_/PT100.md">PT100 MAX31865 Setup</a></td>
+      <td>xbst_</td>
+    </tr>
+    <tr>
+      <td><a href="./Deuce/Voron2_Monster8_v1.0_Config.md">MKS Makerbase Monster8 v1.0</a></td>
+      <td>Deuce</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="external-links">External Links</h3>
+
+<ul>
+  <li><a href="https://github.com/VoronDesign/Voron-Hardware/blob/master/Klipper_Expander/Documentation/README.md#setup">Klipper Expander</a></li>
+</ul>
+:ET

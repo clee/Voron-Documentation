@@ -1,0 +1,62 @@
+I"$
+<h1 id="software-installation">Software Installation</h1>
+
+<p>All stock Voron printers run on the <a href="https://klipper3d.com">Klipper</a> firmware. However, there are a few different web interfaces available for managing your printer.
+The Voron Project recommends using Mainsail or Fluidd, although it is also possible to use Octoprint.   Mainsail and Fluidd are both developed specifically for Klipper based printers, whereas Octoprint is a more general-use platform.</p>
+
+<p><em>Note: If you are using a Pi Zero, such as in the Voron Legacy, you must use Mainsail or Fluidd</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mainsail</th>
+      <th>Fluidd</th>
+      <th>Octoprint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="images/mainsail.png" alt="Mainsail Screenshot" /></td>
+      <td><img src="images/fluidd.png" alt="Fluidd Screenshot" /></td>
+      <td><img src="images/octoprint.png" alt="Octoprint screenshot" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="mainsail">Mainsail</h3>
+
+<p>Mainsail is a lightweight web interface for Klipper and other subsystems.  It does not support plugins but generally doesn’t need to.</p>
+
+<h4 id="installing-mainsail"><a href="./installing_mainsail.md">Installing Mainsail</a></h4>
+
+<h3 id="fluidd">Fluidd</h3>
+
+<p>Fluidd is a lightweight web interface for Klipper and other subsystems that is very similar to Mainsail but has a different look and feel.  It also does not support plugins.</p>
+
+<h4 id="installing-fluidd"><a href="./installing_fluidd.md">Installing Fluidd</a></h4>
+
+<h3 id="octoprint">Octoprint</h3>
+
+<p>Octoprint has been a popular system for many years.  It supports plugins but also requires substantial CPU and memory.</p>
+
+<h4 id="installing-octoprint"><a href="./installing_octoprint.md">Installing Octoprint</a></h4>
+
+<h2 id="firmware-flashing">Firmware Flashing</h2>
+
+<p>At this point Klipper will be installed on the Raspberry Pi.  The next step is to compile and install the Klipper firmware onto the controller(s).</p>
+
+<ul>
+  <li><a href="./skr13_klipper.md">SKR 1.3</a></li>
+  <li><a href="./skr13_klipper.md">SKR 1.4</a></li>
+  <li><a href="./miniE3_v12_klipper.md">SKR mini e3 V1.2</a></li>
+  <li><a href="./miniE3_v20_klipper.md">SKR mini e3 V2.0</a></li>
+  <li><a href="./flyf407zg_klipper.md">FLY FLYF407ZG</a></li>
+  <li><a href="./spider_klipper.md">Fysetc Spider</a></li>
+  <li><a href="./octopus_klipper.md">BTT Octopus</a></li>
+</ul>
+
+<hr />
+<h3 id="next-software-configuration">Next: <a href="./configuration.md">Software Configuration</a></h3>
+:ET

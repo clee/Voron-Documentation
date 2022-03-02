@@ -1,0 +1,49 @@
+<h1 id="voron-v2---fly-flyf407zg-wiring">Voron V2 - FLY FLYF407ZG Wiring</h1>
+
+<h2 id="initial-preparation">Initial Preparation</h2>
+
+<ul>
+  <li>Remove all jumpers from the board.  Install just the jumpers as shown.</li>
+</ul>
+
+<p><img src="./images/voron2_flyf407zg_uart_jumpers.png" alt="" /></p>
+
+<h2 id="mcu-part-1">MCU Part 1</h2>
+
+<ul>
+  <li>Place stepper drivers for X, Y, E, Z, Z1, Z2, and Z3 in positions X, Y, E0, E2, E3, E4, E5</li>
+  <li>Plug in stepper motors for X, Y, E, Z, Z1, Z2, and Z3 in positions X, Y, E0, E2, E3, E4, E5</li>
+  <li>Plug Hot End thermistor to thermistor T0</li>
+  <li>Plug Hot End heater in to HEATER T0</li>
+  <li>Plug Bed Heater thermistor in to T1</li>
+  <li>Plug SSR Control for Heated Bed in to BED</li>
+  <li>Plug Probe PWR and GND into VCC</li>
+  <li>Plug Probe Signal (with BAT85 diode) in to SERVO0, pin 1 (toward USB)</li>
+  <li>Wire 24V and 0V from DC power supply to Power In</li>
+  <li>Connect USB Cable to your FLYF407ZG, but do not connect it yet to your Raspberry Pi</li>
+</ul>
+
+<p><img src="./images/voron2_flyf407zg_mcu_1.png" alt="" /></p>
+
+<h2 id="mcu-part-2">MCU Part 2</h2>
+
+<ul>
+  <li>Plug Hot End Fan in to FAN0</li>
+  <li>Plug Part Cooling Fan in to FAN1</li>
+  <li>Connect X end stop to X-MAX connector</li>
+  <li>Connect Y end stop to Y-MAX connector</li>
+  <li>Plug in Exhaust Fan in to FAN3</li>
+  <li>Plug in Controller Fan 1 in to FAN4</li>
+  <li>Plug in Controller Fan 2 in to FAN5</li>
+  <li>Plug Z Endstop Switch into Z-MAX</li>
+  <li>Plug display wires in to EXP1 and EXP2</li>
+</ul>
+
+<p><img src="./images/voron2_flyf407zg_mcu_2.png" alt="" /></p>
+
+<h2 id="pinout">Pinout</h2>
+
+<p>For reference, here is the pinout of the FLYF407ZG</p>
+
+<p><img src="./images/flyf407zg_pinout.png" alt="" />
+<img src="./images/flyf407zg_port_illustration.png" alt="" /></p>

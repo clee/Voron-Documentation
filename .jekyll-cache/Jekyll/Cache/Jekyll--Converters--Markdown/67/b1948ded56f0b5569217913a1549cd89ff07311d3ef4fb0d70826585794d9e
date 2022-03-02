@@ -1,0 +1,82 @@
+I"�<h1 id="voron-switchwire---screws-adjust-method">Voron Switchwire - Screws Adjust method</h1>
+
+<p>This process should be used when using the <code class="language-plaintext highlighter-rouge">Prusa Nylock Mod</code> with your Switchwire heated bed. This mod replaces 8 of the metallic 6mm spacers by nylon washers and M3 nylock nuts.</p>
+
+<h2 id="bill-of-materials">Bill of Materials</h2>
+
+<p>8 Nylon washers: <a href="https://www.amazon.com/dp/B07MX9LDQY">Amazon - not affiliate</a></p>
+
+<p>8 Nylock nuts: <a href="https://www.amazon.com/dp/B078T4TGY6">Amazon - not affiliate</a></p>
+
+<h2 id="configuration-update">Configuration update</h2>
+
+<p>In your printer.cfg, include the following section:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[screws_tilt_adjust]</span>
+<span class="c"># SW Nylock Mod: Screw 1 uses the 6mm metallic spacer so its
+# height is considered the baseline. For tilt adjust using the
+# command SCREWS_TILT_CALCULATE, this has to be your Screw 1:
+#
+#         ******************
+#         * S7    S8    S9 *
+#         *                * 
+#   Bed:  * S5    S1    S6 *  
+#         *                *
+#         * S2    S3    S4 *
+#         ******************
+#
+</span><span class="err">screw1:</span> <span class="err">128,110</span>
+<span class="err">screw1_name:</span> <span class="err">center</span>
+<span class="err">screw2:</span> <span class="err">18,5</span>
+<span class="err">screw2_name:</span> <span class="err">front_left</span>
+<span class="err">screw3:</span> <span class="err">128,5</span>
+<span class="err">screw3_name:</span> <span class="err">front_center</span>
+<span class="err">screw4:</span> <span class="err">233,5</span>
+<span class="err">screw4_name:</span> <span class="err">front_right</span>
+<span class="err">screw5:</span> <span class="err">18,110</span>
+<span class="err">screw5_name:</span> <span class="err">middle_left</span>
+<span class="err">screw6:</span> <span class="err">233,110</span>
+<span class="err">screw6_name:</span> <span class="err">middle_right</span>
+<span class="err">screw7:</span> <span class="err">18,215</span>
+<span class="err">screw7_name:</span> <span class="err">rear_left</span>
+<span class="err">screw8:</span> <span class="err">128,215</span>
+<span class="err">screw8_name:</span> <span class="err">rear_center</span>
+<span class="err">screw9:</span> <span class="err">233,215</span>
+<span class="err">screw9_name:</span> <span class="err">rear_right</span>
+<span class="err">horizontal_move_z:</span> <span class="err">10.</span>
+<span class="err">speed:</span> <span class="err">50.</span>
+<span class="err">screw_thread:</span> <span class="err">CCW-M3</span>
+</code></pre></div></div>
+
+<p>This sections tells Klipper the location of your screws. These measurements were taken from a Switchwire build using the LDO Y Carriage and Heated bed.</p>
+
+<p>In this method, Klipper uses one screw as baseline for calculating the adjustment for the remaining screws. In this configuration, the center screw is the baseline, so it has to be our <code class="language-plaintext highlighter-rouge">screw1</code>. This screw still uses the original 6mm metallic spacer from the original bill of materials. All 8 of the other screws will use the M3 screws, washers and the nylock nut.</p>
+
+<p><a href="https://www.youtube.com/watch?v=qRbMOfMy-MA">Here</a> is a quick video from <code class="language-plaintext highlighter-rouge">Chris Riley</code> showing show to assemble the screws, washers and the nylock nuts.</p>
+
+<h2 id="adjusting-the-screws">Adjusting the screws</h2>
+
+<p>Once you saved and restarted your firmware, run the following commands on Fluidd or Mainsails console:</p>
+
+<pre><code class="language-gcode">G8 
+SCREWS_TILT_CALCULATE
+</code></pre>
+
+<p>Klipper will move the toolhead over each of the 8 screws and calculate the amount of adjustment you need for each of the screws. Once it finishes it will give you an output similar to this one:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>08:35:49 // center (Base): X 128.0, Y 110.0, Z 2.02500
+08:35:49 // front_left : X 18.0, Y 5.0, Z 2.11250 : Adjust -&gt; CCW 00:11
+08:35:49 // front_center : X 128.0, Y 5.0, Z 2.02500 : Adjust -&gt; CW 00:00
+08:35:49 // front_right : X 233.0, Y 5.0, Z 2.07500 : Adjust -&gt; CCW 00:06
+08:35:49 // middle_left : X 18.0, Y 110.0, Z 2.08750 : Adjust -&gt; CCW 00:07
+08:35:49 // middle_right : X 233.0, Y 110.0, Z 1.98750 : Adjust -&gt; CW 00:05
+08:35:49 // rear_left : X 18.0, Y 215.0, Z 2.05000 : Adjust -&gt; CCW 00:03
+08:35:49 // rear_center : X 128.0, Y 215.0, Z 1.40000 : Adjust -&gt; CW 01:15
+08:35:49 // rear_right : X 233.0, Y 215.0, Z 2.05000 : Adjust -&gt; CCW 00:03
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">CW</code> refers to a clockwise turn and <code class="language-plaintext highlighter-rouge">CCW</code> refers to a counter-clockwise turn and the number after refers to the amount of “minutes” the screw needs to be turned, so for screw middle_right <code class="language-plaintext highlighter-rouge">CW 00:05</code>, the screw needs to be turned 5 minutes clockwise, while for screw middle_left <code class="language-plaintext highlighter-rouge">CCW 00:07</code> the screw needs to be turned 7 minutes counter clockwise.</p>
+
+<p>According to Klipper <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Manual_Level.md#adjusting-bed-leveling-screws-using-the-bed-probe">documentation</a>, you should be good when the amount to be adjusted is less or equal than <code class="language-plaintext highlighter-rouge">00:06</code> (6 minutes) - but you should aim for at least <code class="language-plaintext highlighter-rouge">00:02</code> (2 minutes).</p>
+
+:ET

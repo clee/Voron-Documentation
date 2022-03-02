@@ -1,0 +1,85 @@
+I"µ<h1 id="twisted-x-extrusion-diagnostics">Twisted X Extrusion Diagnostics</h1>
+
+<p>If a first layer is constantly high on one or both sides and is low on the other side or in the middle, the printer may have a twisted X extrusion.  than can happen from the factory or be a result of a head crash.</p>
+
+<p>The sensor is correctly offset from the bed based on the Bed_Tilt or Quad_Gantry_Level, but the nozzle is ~25mm in front of the probe. As the head moves along the twisted X extrusion the toolhead is rotating about the X axis swinging the nozzle in an arc. Moving along Y should not change this rotation.</p>
+
+<p>This process helps to identify a twisted X extrusion without tearing down the printer.</p>
+
+<p><em>Note: The values used in this exmaple are for a printer with a 300x300 bed.  If the printer being tested is larger or smaller, compensate accordingly.</em></p>
+
+<h2 id="prep">Prep</h2>
+
+<p>Perform the following homing procedure(s):</p>
+
+<h4 id="v1">V1</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BED_MESH_CLEAR
+G28
+BED_TILT
+G28
+</code></pre></div></div>
+
+<h4 id="v2">V2</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BED_MESH_CLEAR
+G28
+QUAD_GANTRY_LEVEL
+G28
+</code></pre></div></div>
+
+<h2 id="measure">Measure</h2>
+
+<h3 id="measure-middle-center">Measure Middle Center</h3>
+
+<ul>
+  <li>Move to center of bed</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>G90
+G0 X150 Y150 Z5
+</code></pre></div></div>
+
+<ul>
+  <li>Find bed location by moving bed down 0.1mm at a time until it touches a piece of paper.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>G91
+G0 Z-0.1
+</code></pre></div></div>
+
+<ul>
+  <li>Retrieve current location</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>M114
+</code></pre></div></div>
+
+<ul>
+  <li>Record position</li>
+</ul>
+
+<h3 id="measure-remaining-points">Measure Remaining Points</h3>
+
+<ul>
+  <li>Middle Right (X250, Y150)</li>
+  <li>Middle Left (X50, Y150)</li>
+  <li>Front Center (X150, Y50)</li>
+  <li>Front Right (X250, Y50)</li>
+  <li>Front Left (X50, Y50)</li>
+  <li>Rear Center (X150, Y250)</li>
+  <li>Rear Right (X250, Y250)</li>
+  <li>Rear Left (X50, Y250)</li>
+</ul>
+
+<h2 id="calculations">Calculations</h2>
+
+<p>For each Y position (Middle, Front, Rear), calculate the Z offset of each side with the following calculation:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Z Offset = (Recorded Z Value - Center Z Value)</code></p>
+
+<p>Compute the 6 resulting values for (Middle, Front, Rear) and (Left, Right).</p>
+
+<h2 id="comparisons">Comparisons</h2>
+
+<p>If the Z offsets match for the same three X positions along the different Y values there is likely a twisted X extrusion - (or the bed is a perfect taco)</p>
+:ET

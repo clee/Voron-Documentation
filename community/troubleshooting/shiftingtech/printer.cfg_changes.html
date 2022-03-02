@@ -1,0 +1,55 @@
+<h1 id="printercfg-changes--klipper-updates">printer.cfg Changes &amp; Klipper updates</h1>
+<p>You just updated klipper, and now your printer won’t start?  Don’t worry.  The vast majority of these issues are quickly fixed with a few easy changes to your <em>printer.cfg</em></p>
+
+<p><em>Do note: this guide is only intended to highlight changes that show up in at least one stock Voron configuration.  If you have a heavily customized config, you will likely also need to have a look at the <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Config_Changes.md">Klipper config changes document</a></em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Change Date</th>
+      <th>Printer</th>
+      <th>changes required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2021-03-04</td>
+      <td>All</td>
+      <td>Moonraker now requires <code class="language-plaintext highlighter-rouge">[octoprint_compat]</code> in moonraker.conf, in order to accept octoprint style slicer uploads</td>
+    </tr>
+    <tr>
+      <td>2020-12-22</td>
+      <td>All</td>
+      <td>Klipper is depreciating <code class="language-plaintext highlighter-rouge">step_distance:</code> in favour of <code class="language-plaintext highlighter-rouge">rotation_distance:</code>  Please see the <a href="rotation_distance.md">rotation_distance</a> document. Although it’s currently in a soft transition period, this change will eventually break <em>all</em> existing printer.cfg</td>
+    </tr>
+    <tr>
+      <td>2020-11-20</td>
+      <td>Voron-2</td>
+      <td>If you are using aliases, aka, a <code class="language-plaintext highlighter-rouge">[board_pins]</code> section: add the line <code class="language-plaintext highlighter-rouge">mcu: mcu, z</code></td>
+    </tr>
+    <tr>
+      <td>2020-10-29</td>
+      <td>All</td>
+      <td>If you are using a Fystec Mini12864, or other display with neopixels: in the <code class="language-plaintext highlighter-rouge">[neopixel]</code> section, replace <code class="language-plaintext highlighter-rouge">color_order_GRB: False</code> with <code class="language-plaintext highlighter-rouge">color_order: RGB</code></td>
+    </tr>
+    <tr>
+      <td>2020-09-02</td>
+      <td>All</td>
+      <td>If you are using a MAX31865 amplifier, there was a math error, which has now been corrected.  you will need to re calibrate all printing temperatures, and re PID-tune your extruder.</td>
+    </tr>
+    <tr>
+      <td>2020-08-09</td>
+      <td>All</td>
+      <td>If you are using any custom display menus, the configuration has changed.  You will need to remove these menus, or re-write them with the new formatting</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="okay-my-printercfg-is-good-but-now-im-getting-this-other-error">Okay, my printer.cfg is good, but now I’m getting this other error:</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Recv: // Unknown command: queue_digital_out
+Recv: // This type of error is frequently caused by running an older
+Recv: // version of the firmware on the micro-controller (fix by
+Recv: // recompiling and flashing the firmware).
+</code></pre></div></div>
+
+<p>Remember, klipper is split into two halves.  the main software, which runs on your Pi, and the MCU firmware, which runs on the SKR or other printer control board.  These sorts of errors typically mean that you have updated the main software, but not the MCU Firmware.  You should follow the flashing process for your specific MCU board, found in the <a href="../../../build/software/#firmware-flashing">build docs</a></p>

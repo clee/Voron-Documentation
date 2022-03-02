@@ -1,0 +1,71 @@
+I"5<h1 id="voron-v2--trident---bigtreetech-octopus-wiring">Voron V2 / Trident - BigTreeTech Octopus Wiring</h1>
+
+<h2 id="initial-preparation">Initial Preparation</h2>
+
+<p>Set jumpers as shown:</p>
+
+<p><img src="./images/v2-octopus-initial-preparation.png" alt="" /></p>
+
+<ul>
+  <li>Green – Add Jumper</li>
+  <li>Red – Remove Jumper
+    <ol>
+      <li>Insert only the jumper in the Green and remove the other three jumpers in the Red in order to use TMC2209 UART mode.</li>
+      <li>Remove all the jumpers of DIAG to avoid the influence of TMC2209 DIAG on the endstop.</li>
+      <li>Remove the USB 5V power supply jumper to avoid the interaction between the USB 5V of raspberry pi and the DC-DC 5V of the motherboard.</li>
+      <li>Insert all the jumpers into V_FUSED to set the fan voltage to the system supply voltage.</li>
+      <li>Insert the jumper into V_FUSED to set the probe voltage to the system supply voltage.</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="wiring">Wiring</h2>
+
+<ul>
+  <li>Connect 24V and GND (V+ and V-) from the PSU to PWR and MOTOR_POWER</li>
+  <li>Connect the B Motor (gantry left) to MOTOR0</li>
+  <li>Connect the A Motor (gantry right) to MOTOR1</li>
+  <li>Connect the Z motor to MOTOR2_1</li>
+  <li>Connect the Z1 motor to MOTOR3</li>
+  <li>Connect the Z2 motor to MOTOR4</li>
+  <li>Connect the Z3 motor to MOTOR5 (v2 only)</li>
+  <li>Connect the extruder motor to MOTOR6</li>
+  <li>Connect the hot end heater to HE0</li>
+  <li>Connect the bed SSR (DC Control Side) to HE1</li>
+  <li>Connect the part cooling fan to FAN0</li>
+  <li>Connect the hot end fan to FAN1</li>
+  <li>Connect the controller fans to FAN2</li>
+  <li>Connect the chamber exhaust fan to  FAN3</li>
+  <li>Connect the hot end thermistor to TE0</li>
+  <li>Connect the bed thermistor to TB</li>
+  <li>Connect the X endstop to STOP_0</li>
+  <li>Connect the Y endstop to STOP_1</li>
+  <li>Connect the Z endstop to STOP_2</li>
+  <li>Connect the signal wire on the probe to STOP_7</li>
+  <li>Connect the V+ and 0V wires on the probe to PROBE</li>
+  <li>if using a mini12864 display, connect to EXP1 &amp; EXP2, only after completing the steps shown <a href="#mini-12864-Display">below</a></li>
+</ul>
+
+<p><img src="./images/v2_octopus_wiring.png" alt="" /></p>
+
+<h2 id="ssr-wiring">SSR Wiring</h2>
+
+<ul>
+  <li>Wire colors will vary depending on your location.</li>
+</ul>
+
+<p><img src="./images/btt-octopus-ssr-wiring.png" alt="" />
+<br />
+<br /></p>
+<h2 id="mini-12864-display">mini 12864 Display</h2>
+<ul>
+  <li>See <a href="./mini12864_klipper_guide.md">the mini12864 guide</a></li>
+</ul>
+
+<h2 id="other">Other</h2>
+<ul>
+  <li>full pinout, and other BigTreeTech documentation is located at <a href="https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-V1.0">here</a></li>
+  <li>Octopus v1.1 pinout is located <a href="https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-V1.0/blob/master/Hardware/BIGTREETECH%20Octopus%20-%20PIN.pdf">here</a></li>
+  <li>Octopus Pro v1.0 pinout is located <a href="https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-Pro/blob/master/Hardware/BIGTREETECH%20Octopus%20Pro%20-%20PIN.pdf">here</a></li>
+</ul>
+:ET

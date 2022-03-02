@@ -1,0 +1,103 @@
+<h1 id="voron-raspberrypi-bootscreens">Voron RaspberryPi Bootscreens</h1>
+<p><img src="./Images/boot_tile.png" alt="" /></p>
+
+<p>Source PSD and images can be found in my <a href="https://github.com/samwiseg0/misc_3dprinting/tree/main/guides/voron_rpi_bootscreen">GitHub repo</a>! Feel free to reach out to me on discord <a href="https://discord.com/users/210122378317922308">Samwiseg0#4034</a>. I will be happy to customize the serial number on any of the splash screens.</p>
+
+<p>## How to remove the text and logo on raspbian buster</p>
+
+<p>Start by removing all the default screens and also the Raspberry images. Also, disable all the bootup lines.</p>
+
+<p>Edit <code class="language-plaintext highlighter-rouge">/boot/config.txt</code> to remove the color test/rainbow screen.</p>
+
+<pre><code class="language-cmd"> sudo nano /boot/config.txt
+</code></pre>
+
+<p>Add:</p>
+<pre><code class="language-cmd">disable_splash=1
+</code></pre>
+<p>Press <strong>ctrl+X, Y for save and Enter</strong> to return to the command line.</p>
+
+<p>Edit <code class="language-plaintext highlighter-rouge">/boot/cmdline.txt</code></p>
+<pre><code class="language-cmd">sudo nano /boot/cmdline.txt
+</code></pre>
+<p>Add the following to the end of the first line</p>
+
+<pre><code class="language-cmd">logo.nologo consoleblank=0 loglevel=1 quiet vt.global_cursor_default=0
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">logo.nologo</code> - Remove the Raspberry logo.</li>
+  <li><code class="language-plaintext highlighter-rouge">consoleblank=0 loglevel=1 quiet</code> - Disable the commands and various bits of the kernel</li>
+  <li><code class="language-plaintext highlighter-rouge">vt.global_cursor_default=0</code>- Removes the blinking cursor before the image loads.</li>
+</ul>
+
+<p>Press <strong>ctrl+X, Y for save and Enter</strong> to return to the command line.</p>
+
+<p>Remove the login prompt by running</p>
+<pre><code class="language-cmd">sudo systemctl disable getty@tty3
+</code></pre>
+
+<h2 id="add-the-new-splash-screen">Add the new splash screen</h2>
+
+<p>To make the image readable install <code class="language-plaintext highlighter-rouge">fbi</code>. <code class="language-plaintext highlighter-rouge">fbi</code> is a frame-buffer image viewer.</p>
+
+<p>Install <code class="language-plaintext highlighter-rouge">fbi</code></p>
+<pre><code class="language-cmd">sudo apt install fbi
+</code></pre>
+
+<p>It will take a few seconds to install. After this we have to
+create a file by</p>
+
+<pre><code class="language-cmd">sudo nano /etc/systemd/system/splashscreen.service
+</code></pre>
+
+<p>Add the following:</p>
+
+<pre><code class="language-cmd">[Unit]
+Description=Splash screen
+DefaultDependencies=no
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a /home/pi/boot-image.png
+StandardInput=tty
+StandardOutput=tty
+
+[Install]
+WantedBy=sysinit.target
+</code></pre>
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">-d/dev/fb0</code> - Tells <code class="language-plaintext highlighter-rouge">fbi</code> which image to display.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">--noverbose</code> - Suppresses <code class="language-plaintext highlighter-rouge">fbi</code> ‘status bar’ at the bottom.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">-a</code> - If the selected image is in the proper measurements then no editing is required if not then “-a” will act as editor.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">StandardInput</code>/<code class="language-plaintext highlighter-rouge">StandardOutput</code>  - Allows <code class="language-plaintext highlighter-rouge">fbi</code> get access to tty.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DefaultDependencies</code> -  will override the systemd’s default behavior.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">fbi</code> will be loaded in the boot process when <code class="language-plaintext highlighter-rouge">WantedBy</code> is accessed, not before the file system (and hence image) are ready, through the <code class="language-plaintext highlighter-rouge">After</code> option.</p>
+  </li>
+</ul>
+
+<p>Place the image on the pi and name it <code class="language-plaintext highlighter-rouge">boot-image.png</code>. The image should live in the main home directory for the <code class="language-plaintext highlighter-rouge">pi</code> user. The full path for the image is <code class="language-plaintext highlighter-rouge">/home/pi/boot-image.png</code> <strong>You may use another name but you must change it in the systemd file above.</strong></p>
+
+<p>You can find a basic guide on how to conect to the pi and transfer a file <a href="https://howchoo.com/pi/how-to-transfer-files-to-the-raspberry-pi">here</a>. Note that when you connect to your pi via any of these methods the default location is <code class="language-plaintext highlighter-rouge">/home/pi/</code>. You should be able to just drop the file into the default directory after connecting.</p>
+
+<p>Enable the service by running</p>
+<pre><code class="language-cmd">sudo systemctl enable splashscreen
+</code></pre>
+
+<p>Now reboot the Raspberry Pi and verify your image by</p>
+
+<pre><code class="language-cmd">sudo reboot
+</code></pre>
+
+<p>fin.</p>

@@ -1,0 +1,50 @@
+<h1 id="voron-v2---skr-13-wiring">Voron V2 - SKR 1.3 Wiring</h1>
+
+<h2 id="initial-preparation">Initial Preparation</h2>
+
+<ul>
+  <li>Reconfigure the on-board jumpers as shown.</li>
+</ul>
+
+<p><img src="./images/skr13-preparation.png" alt="" /></p>
+
+<h2 id="mcu-xye-hot-end">MCU X/Y/E, Hot End</h2>
+
+<ul>
+  <li>Place stepper drivers for X, Y, and E in positions X, Y, and E0</li>
+  <li>Plug in stepper motors for X, Y, and E in positions X, Y, and E0</li>
+  <li>Plug Hot End thermistor to thermistor TH0 (P0.24)</li>
+  <li>Plug Hot End heater in to HE0 (P2.7)</li>
+  <li>Plug Hot End Fan in to HE1 (P2.4)</li>
+  <li>Plug Part Cooling Fan in to Fan (P2.3)</li>
+  <li>Connect X end stop to +X connector (P1.28)</li>
+  <li>Connect Y end stop to +Y connector (P1.26)</li>
+  <li>Wire 24V and 0V from DC power supply to Power In</li>
+  <li>Connect USB Cable to your SKR 1.3, but do not connect it yet to your Raspberry Pi</li>
+</ul>
+
+<p><img src="./images/v2-skr13-mcu-xye.png" alt="" /></p>
+
+<h2 id="mcu-z-bed-exhaust-fan">MCU Z, Bed, Exhaust Fan</h2>
+
+<ul>
+  <li>Place stepper drivers for Z0, Z1, Z2, and Z3 into positions X, Y, Z, and E0</li>
+  <li>Plug in stepper motors for Z0, Z1, Z2, and Z3 into positions X, Y, Z, and E0</li>
+  <li>Plug Bed Heater Temp in to TB (P0.23)</li>
+  <li>Plug in Exhaust Fan in to HE0 (P2.7)</li>
+  <li>Plug in Controller Fan in to HE1 (P2.4)</li>
+  <li>Plug SSR Control for Heated Bed in to Fan (P2.3)</li>
+  <li>Plug Z Endstop Switch into -Z (P1.25)</li>
+  <li>Plug Probe GND and Signal (with BAT85 diode) in to +Z (P1.24</li>
+  <li>Plug display wires in to EXP1 and EXP2</li>
+  <li>Wire 24V and 0V from DC power supply to Power In</li>
+  <li>Connect USB Cable to your SKR 1.3, but do not connect it yet to your Raspberry Pi</li>
+</ul>
+
+<p><img src="./images/v2-skr13-mcu-z.png" alt="" /></p>
+
+<h2 id="skr-13-pinout">SKR 1.3 Pinout</h2>
+
+<p>For reference, here is the pinout of the SKR 1.3</p>
+
+<p><img src="./images/SKR-V1.3-pinout.jpg" alt="" /></p>

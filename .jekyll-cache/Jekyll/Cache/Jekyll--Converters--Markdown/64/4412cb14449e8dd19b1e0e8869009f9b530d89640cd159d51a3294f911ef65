@@ -1,0 +1,170 @@
+I"¦:<h1 id="rotation-distance">Rotation Distance</h1>
+<p>On 2020-12-22, klipper introduced a new system for defining stepper motor movement, replacing the old <code class="language-plaintext highlighter-rouge">step_distance</code> setting with a new <code class="language-plaintext highlighter-rouge">rotation_distance</code> setting.
+Currently, we are in a transitional period, where the old <code class="language-plaintext highlighter-rouge">step_distance</code> settings are depreciated, but may still be used.  Sometime around 2021-06-15, this new system is expected to become mandatory.  When this second change occurs, it <em>will break</em> all printer.cfg which have not been adapted to the new system.</p>
+
+<p>For full information on the new system, see the <a href="https://github.com/KevinOConnor/klipper/blob/master/docs/Rotation_Distance.md">klipper documentation</a></p>
+
+<h1 id="changes-required">Changes Required?</h1>
+<p>You will need to update all stepper motor related sections of your printer.cfg. These include all <code class="language-plaintext highlighter-rouge">[stepper_??]</code>, <code class="language-plaintext highlighter-rouge">[tmcXXXX stepper_??]</code>, <code class="language-plaintext highlighter-rouge">[extruder]</code>, and <code class="language-plaintext highlighter-rouge">[tmcXXXX extruder]</code> sections.  The specific changes required for each section, on a stock printer are listed below, under</p>
+<ul>
+  <li><a href="#Voron-0">Voron 0</a></li>
+  <li><a href="#Voron-Switchwire">Voron Switchwire</a></li>
+  <li><a href="#Voron-1">Voron 1</a></li>
+  <li><a href="#Voron-2">Voron 2</a></li>
+</ul>
+
+<p><strong>Please Note: If you are running a modified printer, only you can validate whether these settings match your printer</strong></p>
+
+<h1 id="voron-0">Voron 0</h1>
+<h3 id="stepper_x-and-stepper_y"><code class="language-plaintext highlighter-rouge">[stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[stepper_y]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 40</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc2209 section, use the same number here)</li>
+</ul>
+
+<h3 id="tmc2209-stepper_x-and-tmc2209-stepper_y"><code class="language-plaintext highlighter-rouge">[tmc2209 stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[tmc2209 stepper_y]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="stepper_z"><code class="language-plaintext highlighter-rouge">[stepper_z]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>For a T8x8 Leadscrew (step_distance: 0.0025): Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 8</code></li>
+  <li>For a T8x2 Leadscrew (step_distance: 0.000625 ): Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 2</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc2209 section, use the same number here)</li>
+</ul>
+
+<h3 id="tmc2209-stepper_z"><code class="language-plaintext highlighter-rouge">[tmc2209 stepper_z]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="extruder"><code class="language-plaintext highlighter-rouge">[extruder]</code></h3>
+<ul>
+  <li>calculate your new rotation_distance.  the basic formula is <code class="language-plaintext highlighter-rouge">rotation_distance = &lt;full_steps_per_rotation&gt; * &lt;microsteps&gt; * &lt;step_distance&gt;</code> in most cases, this means:  <code class="language-plaintext highlighter-rouge">rotation_distance = 200 * 16 * &lt;old_step_distance&gt;</code></li>
+  <li>remove the <code class="language-plaintext highlighter-rouge">step_distance:</code> line</li>
+  <li>add the line <code class="language-plaintext highlighter-rouge">rotation_distance: x</code> replacing <em>x</em> with the value you calculated above</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+</ul>
+
+<h3 id="tmc2209-extruder"><code class="language-plaintext highlighter-rouge">[tmc2209 extruder]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h1 id="voron-switchwire">Voron Switchwire</h1>
+
+<h3 id="stepper_x-stepper_y-and-stepper_z"><code class="language-plaintext highlighter-rouge">[stepper_x]</code>, <code class="language-plaintext highlighter-rouge">[stepper_y]</code>, and <code class="language-plaintext highlighter-rouge">[stepper_z]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 40</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc2209-stepper_x-tmc2209-stepper_y-tmc2209-stepper_z-or-tmc2130-stepper_x-tmc2130-stepper_y-tmc2130-stepper_z"><code class="language-plaintext highlighter-rouge">[tmc2209 stepper_x]</code>, <code class="language-plaintext highlighter-rouge">[tmc2209 stepper_y]</code>, <code class="language-plaintext highlighter-rouge">[tmc2209 stepper_z]</code> or <code class="language-plaintext highlighter-rouge">[tmc2130 stepper_x]</code>, <code class="language-plaintext highlighter-rouge">[tmc2130 stepper_y]</code>, <code class="language-plaintext highlighter-rouge">[tmc2130 stepper_z]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="extruder-1"><code class="language-plaintext highlighter-rouge">[extruder]</code></h3>
+<ul>
+  <li>calculate your new rotation_distance.  the basic formula is <code class="language-plaintext highlighter-rouge">rotation_distance = &lt;full_steps_per_rotation&gt; * &lt;microsteps&gt; * &lt;step_distance&gt;</code> in most cases, this means:  <code class="language-plaintext highlighter-rouge">rotation_distance = 200 * 16 * &lt;old_step_distance&gt;</code></li>
+  <li>remove the <code class="language-plaintext highlighter-rouge">step_distance:</code> line</li>
+  <li>add the line <code class="language-plaintext highlighter-rouge">rotation_distance: x</code> replacing <em>x</em> with the value you calculated above</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc2209-extruder-or-tmc2130-extruder"><code class="language-plaintext highlighter-rouge">[tmc2209 extruder]</code> or <code class="language-plaintext highlighter-rouge">[tmc2130 extruder]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h1 id="voron-1">Voron 1</h1>
+<h3 id="stepper_x-and-stepper_y-1"><code class="language-plaintext highlighter-rouge">[stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[stepper_y]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 40</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc220* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-stepper_x-and-tmc220-stepper_y"><code class="language-plaintext highlighter-rouge">[tmc220* stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[tmc220* stepper_y]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="stepper_z-stepper_z1"><code class="language-plaintext highlighter-rouge">[stepper_z]</code>, <code class="language-plaintext highlighter-rouge">[stepper_z1]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 8</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-stepper_z-tmc220-stepper_z1"><code class="language-plaintext highlighter-rouge">[tmc220* stepper_z]</code>, <code class="language-plaintext highlighter-rouge">[tmc220* stepper_z1]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="extruder-2"><code class="language-plaintext highlighter-rouge">[extruder]</code></h3>
+<ul>
+  <li>calculate your new rotation_distance.  the basic formula is <code class="language-plaintext highlighter-rouge">rotation_distance = &lt;full_steps_per_rotation&gt; * &lt;microsteps&gt; * &lt;step_distance&gt;</code> in most cases, this means:  <code class="language-plaintext highlighter-rouge">rotation_distance = 200 * 16 * &lt;old_step_distance&gt;</code></li>
+  <li>remove the <code class="language-plaintext highlighter-rouge">step_distance:</code> line</li>
+  <li>add the line <code class="language-plaintext highlighter-rouge">rotation_distance: x</code> replacing <em>x</em> with the value you calculated above</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-extruder"><code class="language-plaintext highlighter-rouge">[tmc220* extruder]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h1 id="voron-2">Voron 2</h1>
+
+<h3 id="stepper_x-and-stepper_y-2"><code class="language-plaintext highlighter-rouge">[stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[stepper_y]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 40</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc220* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-stepper_x-and-tmc220-stepper_y-1"><code class="language-plaintext highlighter-rouge">[tmc220* stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[tmc220* stepper_y]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="stepper_z-stepper_z1-stepper_z2-stepper_z3"><code class="language-plaintext highlighter-rouge">[stepper_z]</code>, <code class="language-plaintext highlighter-rouge">[stepper_z1]</code>, <code class="language-plaintext highlighter-rouge">[stepper_z2]</code>, <code class="language-plaintext highlighter-rouge">[stepper_z3]</code></h3>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">step_distance: </code> line</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">rotation_distance: 40</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">gear_ratio: 80:16</code></li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-stepper_z-tmc220-stepper_z1-tmc220-stepper_z2-tmc220-stepper_z3"><code class="language-plaintext highlighter-rouge">[tmc220* stepper_z]</code>, <code class="language-plaintext highlighter-rouge">[tmc220* stepper_z1]</code>, <code class="language-plaintext highlighter-rouge">[tmc220* stepper_z2]</code>, <code class="language-plaintext highlighter-rouge">[tmc220* stepper_z3]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+<h3 id="extruder-3"><code class="language-plaintext highlighter-rouge">[extruder]</code></h3>
+<ul>
+  <li>calculate your new rotation_distance.  the basic formula is <code class="language-plaintext highlighter-rouge">rotation_distance = &lt;full_steps_per_rotation&gt; * &lt;microsteps&gt; * &lt;step_distance&gt;</code> in most cases, this means:  <code class="language-plaintext highlighter-rouge">rotation_distance = 200 * 16 * &lt;old_step_distance&gt;</code></li>
+  <li>remove the <code class="language-plaintext highlighter-rouge">step_distance:</code> line</li>
+  <li>add the line <code class="language-plaintext highlighter-rouge">rotation_distance: x</code> replacing <em>x</em> with the value you calculated above</li>
+  <li>Add the line <code class="language-plaintext highlighter-rouge">microsteps: 16</code>   (if you have a microstepping other than 16 in your tmc* section, use the same number here)</li>
+  <li>Only for 0.9 degree steppers: add the line <code class="language-plaintext highlighter-rouge">full_steps_per_rotation:400</code></li>
+</ul>
+
+<h3 id="tmc220-extruder-1"><code class="language-plaintext highlighter-rouge">[tmc220* extruder]</code></h3>
+<ul>
+  <li>remove the <code class="language-plaintext highlighter-rouge">microsteps:</code> line</li>
+</ul>
+
+:ET

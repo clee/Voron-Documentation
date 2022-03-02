@@ -1,0 +1,124 @@
+I"^<h1 id="trident-gantry-wires">Trident Gantry Wires</h1>
+
+<p>This chart only includes what goes into the cable chains to the gantry.  It does NOT include exhaust fan, filament runout sensor, or other non-essential wiring.</p>
+
+<h3 id="lengths">Lengths</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>250x250x250</th>
+      <th>300x300x250</th>
+      <th>350x350x250</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>X (Toolhead)</td>
+      <td>190cm</td>
+      <td>200cm</td>
+      <td>210cm</td>
+    </tr>
+    <tr>
+      <td>Y (Endstop Pod)</td>
+      <td>160cm</td>
+      <td>165cm</td>
+      <td>170cm</td>
+    </tr>
+    <tr>
+      <td>Z (Bed)</td>
+      <td>100cm</td>
+      <td>100cm</td>
+      <td>100cm</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="wire-counts">Wire Counts</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>Signal</th>
+      <th>24AWG</th>
+      <th>20 AWG</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>X</td>
+      <td>Hot End Heater</td>
+      <td> </td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Thermistor</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Extruder Motor</td>
+      <td>4</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Inductive Probe</td>
+      <td>3</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Hot End Fan</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Part Fan</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Y</td>
+      <td>X Endstop</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Y</td>
+      <td>Y Endstop</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>Ground</td>
+      <td> </td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>Bed Heater</td>
+      <td> </td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>Bed Thermistor</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>Z Endstop</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+:ET

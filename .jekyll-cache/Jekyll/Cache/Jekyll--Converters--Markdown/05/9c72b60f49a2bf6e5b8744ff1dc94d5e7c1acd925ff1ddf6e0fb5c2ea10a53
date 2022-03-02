@@ -1,0 +1,20 @@
+I"><h1 id="pull-request-guide">Pull Request Guide</h1>
+
+<p>The following is a basic guide for creating pull requests for submtting to any of the Voron repositories such as Documentation and UserMods.</p>
+
+<ol>
+  <li>Create a github user if you don’t have one already.</li>
+  <li>Browse to the Voron github repo, either VoronUsers or Voron-Documentation.</li>
+  <li>On the top right, click on ‘Fork’.</li>
+  <li>It will process for a few seconds, then return back with a fork of the selected repository.  The owner will no longer be ‘Voron Designs’, but the user who forked the repository.</li>
+  <li>Make the desired changes to the local / forked repository.  This can be done from the web UI or the command line.</li>
+  <li>Be sure to create a commit.  This actually adds the files to the request.</li>
+  <li>Return back to the main Voron Designs repo by clicking the link next to “forked from VoronDesign/”</li>
+  <li>Select Pull Requests and click the New Pull Request button.</li>
+  <li>Select Compare Across Forks and select your repository.</li>
+  <li>Give a title for your pull request and fill out the form.</li>
+  <li>Click Create Pull Request. It will be submitted and will be manually reviewed.</li>
+</ol>
+
+<p>For a visual reference, please see <a href="https://i.imgur.com/qQo0DxR.gifv">Nemgrea’s video guide</a></p>
+:ET

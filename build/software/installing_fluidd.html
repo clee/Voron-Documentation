@@ -1,0 +1,52 @@
+<h1 id="installing-fluidd">Installing Fluidd</h1>
+
+<p>The recommended way to install Fluidd on a Raspberry Pi is to use <a href="#FluiddPi">FluiddPi</a>, a pre-packaged disk image.  If you are building a custom configuration, you may need to skip these instructions and install Fluidd <a href="#fluidd-manual-installation">manually</a>.</p>
+
+<h2 id="fluiddpi">FluiddPi</h2>
+
+<p>To install Fluidd on a Raspberry Pi:</p>
+<ol>
+  <li>Download the latest fluiddPi  <a href="https://github.com/cadriel/FluiddPI/releases">Release</a></li>
+  <li>Unzip the .img file from your download.</li>
+  <li>Use <a href="https://www.balena.io/etcher/">BalenaEtcher</a> to write the .img on to an 8GB, or larger SDcard.  <em>THIS WILL DESTROY ALL DATA ON YOUR CARD</em>.</li>
+</ol>
+
+<p><em>note: It is a good idea to use a premium SDcard from a reputable manufacturer such as Sandisk, Kingston or Samsung. Low end cards will often fail quickly when used in this application</em></p>
+
+<ol>
+  <li>If you will be using wifi, edit the file <code class="language-plaintext highlighter-rouge">fluiddpi-wpa-supplicant.txt</code> with your Wifi information. If you are having trouble seeing this file on the sdcard, try removing it and re-inserting it into your card reader.</li>
+  <li>Make sure that your MCU(s) is connected to your pi, If you will be using wired networking, also make sure your ethernet cable is connected.</li>
+  <li>Insert the SDcard into your Pi, and power on the Pi.</li>
+  <li>Find your pi on the network, and ssh into it, (Using PuTTY on Windows or the terminal on MacOS)
+    <ul>
+      <li>If your network supports bonjour, the pi should show up as <code class="language-plaintext highlighter-rouge">fluiddpi.local</code></li>
+      <li>If your network automatically assigns DNS hostnames, it may simply show up as <code class="language-plaintext highlighter-rouge">fluiddpi</code></li>
+      <li>Failing these two options, you may need to check your router’s DHCP server, and find out what IP address as been assigned to the device.</li>
+    </ul>
+  </li>
+  <li>Also connect to your pi in a web browser:  <a href="http://fluiddpi.local">http://fluiddpi.local</a> or whatever you determined the host name/ip to be in the previous step</li>
+  <li>When you first connect, fluiddpi will ask you to “provide the moonraker api uri”:  enter the same host name or IP address once more.  (<code class="language-plaintext highlighter-rouge">fluiddpi.local</code>)</li>
+</ol>
+
+<h3 id="software-update">Software Update</h3>
+
+<p>As soon as you have Fluiddpi loaded, it is highly recommended that you make sure all the software is up to date.  (at times, the downloaded image file
+contains fairly out of date software)</p>
+
+<ol>
+  <li>Access Fluidd through a webbrowser, using whatever IP or hostname you found above.<br />
+(Note, you will see some errors regarding the non-configured state of your printer.  these can be ignored for now)</li>
+  <li>Click the “Settings” button on the left side of the screen</li>
+  <li>Scroll down to the  “Software Updates” section</li>
+  <li>Click the “check for updates” button</li>
+  <li>Click “update” for each component that needs it.</li>
+</ol>
+
+<h3 id="next-firmware-flashing">Next: <a href="./index.md#firmware-flashing">Firmware Flashing</a></h3>
+
+<h2 id="fluidd-manual-installation">Fluidd Manual Installation</h2>
+
+<p>Coming soon.</p>
+
+<hr />
+<h3 id="back-software-installation">Back: <a href="./index.md">Software Installation</a></h3>

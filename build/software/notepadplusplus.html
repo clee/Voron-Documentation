@@ -1,0 +1,21 @@
+<h1 id="notepad-configuration-editor-windows">Notepad++ Configuration Editor (Windows)</h1>
+
+<ol>
+  <li>Install <a href="https://notepad-plus-plus.org">Notepad++</a></li>
+  <li>Under the “Plugins” tab, select “Plugins Admin”</li>
+  <li>Search for “NppFTP”, select the check box, and click “Install”</li>
+  <li>Restart Notepad++ if necessary</li>
+  <li>On the right, there will be a new section. Click the gear icon and select “Profile Settings”</li>
+  <li>In the bottom left, select “Add New” and name the profile as you wish</li>
+  <li>In the Hostname dialog, enter the IP address of your Raspberry Pi</li>
+  <li>In Connection Type, select SFTP</li>
+  <li>Port: 22</li>
+  <li>Username: pi</li>
+  <li>Password: *** (default is raspberry)</li>
+  <li>Close the dialog box, select the blue symbol, and select the name of the profile you create</li>
+  <li>Notepad++ will connect to your Raspberry Pi and display the file structure</li>
+  <li>Navigate to /home/pi and open printer.cfg</li>
+  <li>Make any applicable edits and then save the file</li>
+</ol>
+
+<p>Remember to restart klipper from the Octoprint terminal to see your changes take affect!</p>

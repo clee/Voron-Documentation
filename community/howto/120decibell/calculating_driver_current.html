@@ -1,0 +1,21 @@
+<h1 id="calculating-driver-current-settings">Calculating Driver Current Settings</h1>
+
+<p>When using the 2208 / 2209 drivers, the voltage &amp; current are set in software.  In Klipper, the motor currents have two settings: run and hold.  <a href="https://www.klipper3d.org/TMC_Drivers.html#prefer-to-not-specify-a-hold_current">However, it is no longer recommended</a> to specify a <code class="language-plaintext highlighter-rouge">hold_current</code> for most motors. Klipper current settings are based on root-mean-squared (RMS) and <strong>not</strong> on peak current.  The spec sheets for most motors list the peak current capacity.</p>
+
+<h4 id="calculating-currents">Calculating Currents</h4>
+
+<p>To calculate the maximum Klipper current settings for a given stepper, follow this process:</p>
+
+<ol>
+  <li>Look up the specifications for the stepper motor and locate the peak current limits of the motor.</li>
+  <li>Multiply the peak current by 0.707 to determine the maximum current in RMS.  This is the maximum run current. (Typically round down to the nearest .1)</li>
+  <li>If you plan to set a separate hold current, multiply the maximum run current by 0.6 to determine the hold current.  (Typically round to the nearest (0.05)</li>
+</ol>
+
+<h4 id="example">Example</h4>
+
+<p>The LDO 42STH130-1684 is specified with a maximum current of 1.68 Amps.  Maximum run current is 1.68 * .707 = 1.1877, rounded down to a maximum RMS run current of 1.1 Amps.  Maximum hold current is 1.1877 * 0.6 = 0.712, rounded to a maximum hold current of 0.7 Amps.</p>
+
+<h3 id="maximums">Maximums</h3>
+
+<p>Whatever the maximum calculated current of the motor is, the maximum capacity of the 2209 driver is 1.2 Amps.  Also, the calculation is for the maximum the motor can handle.  It is recommended to start with smaller values and work from there. Starting from the high end may result in melted motor mounts.</p>

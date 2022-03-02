@@ -1,0 +1,192 @@
+I"M5<h1 id="software-configuration">Software Configuration</h1>
+
+<h2 id="initial-voron-printer-configuration">Initial Voron Printer Configuration</h2>
+
+<p>Download the respective Voron base configuration file from the following links:</p>
+
+<ul>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-0/master/VORON-0/Firmware/SKR_E3_Mini_1.2/printer.cfg">V0 SKR mini e3 1.2</a> <em>note:  Not compatible with V0.1</em></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-0/Voron0.1/Firmware/skr-mini-E3-v2.0.cfg">V0 SKR mini e3 2.0</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-0/Voron0.1/Firmware/skr-mini-E3-v3.0.cfg">V0 SKR mini e3 3.0</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-1/Voron1.8/Firmware/klipper_configurations/SKR_1.4/Voron_1_SKR_14_Config.cfg">V1 SKR 1.4</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-2/Voron2.4/firmware/klipper_configurations/SKR_1.3/Voron2_SKR_13_Config.cfg">V2 SKR 1.3</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-2/Voron2.4/firmware/klipper_configurations/SKR_1.4/Voron2_SKR_14_Config.cfg">V2 SKR 1.4</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-2/Voron2.4/firmware/klipper_configurations/Spider/Voron2_Spider_Config.cfg">V2 Spider</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-2/Voron2.4/firmware/klipper_configurations/Octopus/Voron2_Octopus_Config.cfg">V2 Octopus</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-Switchwire/master/Firmware/skr_mini_e3_v2_config.cfg">SW SKR mini e3 V2.0</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-Switchwire/master/Firmware/einsy_config.cfg">SW Einsy Rambo</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-Legacy/main/Firmware/skr_v1.3_config.cfg">Legacy SKR 1.3</a></li>
+  <li><a href="https://raw.githubusercontent.com/VoronDesign/Voron-Trident/main/Firmware/Octopus/Trident_Octopus_Config.cfg">Trident Octopus</a></li>
+</ul>
+
+<p>Rename the downloaded file to <code class="language-plaintext highlighter-rouge">printer.cfg</code></p>
+
+<p><strong>Mainsail</strong>: Upload the file via Mainsail’s interface.  Go to the “Machine” tab, and under “Config Files”, press the “Upload File” button</p>
+
+<p><strong>Fluidd</strong>: Upload the file via Fluidd’s interface.  Go to the “Configuration” Tab, and under “Configuration Files”, press “+”-&gt;”Upload”</p>
+
+<p><strong>Octoprint</strong>: Use a secure file transfer program (WinSCP, Cyberduck, Notepad++, NppFT, BBEdit, scp), to transfer the file to your Raspberry Pi, placing it in the folder <code class="language-plaintext highlighter-rouge">/home/pi</code>.</p>
+
+<h2 id="editing-printercfg">Editing printer.cfg</h2>
+<p><strong>Note:</strong> There are many ways of editing the config file that vary by personal preference.  Mainsail &amp; Fluidd both offer built in printer.cfg editors. Using Nano editor through SSH is simple but not always user friendly.  Notepad++ with the NppFTP plugin (Windows) or bbEdit (macOS) are user friendlier alternatives.</p>
+
+<ul>
+  <li>Mainsail:  Click “Settings”, “Machine”, then on the “printer.cfg”</li>
+  <li>
+    <p>Fluidd: Click “Configuration”, then “printer.cfg”, and choose “edit” from the menu that appears</p>
+  </li>
+  <li><a href="./notepadplusplus.md">Notepad++ Information</a></li>
+  <li>
+    <p><a href="./bbedit.md">bbEdit Information</a></p>
+  </li>
+  <li>Nano: The nano command is slightly different, depending on whether you are using Mainsail, Fluidd, or Octoprint
+    <ul>
+      <li><strong>Mainsail &amp; Fluidd</strong>: <code class="language-plaintext highlighter-rouge">nano ~/klipper_config/printer.cfg</code></li>
+      <li><strong>Octoprint</strong>:<code class="language-plaintext highlighter-rouge">nano ~/printer.cfg</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="review-printercfg">Review printer.cfg</h2>
+<p>There are a variety of entries in printer.cfg which will need to be edited to match your particular build.  Open it with your choice of editors, and go through it carefully.  While the key edits are highlighted below, you should read the entire file, and make sure you have found everything which needs your attention.</p>
+
+<p><strong>Klipper is CASE SENSITIVE.  Be sure everything except comments is LOWER CASE.</strong></p>
+
+<h2 id="required-changes">Required Changes</h2>
+
+<p>The following items <em>must</em> be updated before the printer can function.</p>
+
+<ul>
+  <li>MCU path(s)</li>
+  <li>Thermistor types - hot end, heated bed
+    <ul>
+      <li>See ‘sensor types’ list at end of stock configuration file</li>
+    </ul>
+  </li>
+  <li>Stepper settings (X, Y, Z(s), extruder)
+    <ul>
+      <li>Endstop position</li>
+      <li>Max position</li>
+      <li>Stepper type</li>
+    </ul>
+  </li>
+  <li>Bed Screw / Tilt / Quad Gantry positions</li>
+  <li>Z endstop location</li>
+</ul>
+
+<h2 id="change-details">Change Details</h2>
+
+<h3 id="printer-definitions">Printer Definitions</h3>
+
+<p>In this section you set your maximum accelerations and velocity. The stock config is configured fast - so if you are facing issues - you can tweak these values lower and then increase them as you finish tuning your printer. These are the highest values that klipper will allow regardless of what you may have configured in your slicer.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[printer]</span>
+<span class="err">kinematics:</span> <span class="err">corexy</span>
+<span class="err">max_velocity:</span> <span class="err">350</span>
+<span class="err">max_accel:</span> <span class="err">3000</span>
+<span class="err">max_z_velocity:</span> <span class="err">50</span>
+<span class="err">max_z_accel:</span> <span class="err">350</span>
+<span class="err">square_corner_velocity:</span> <span class="err">10.0</span>
+</code></pre></div></div>
+
+<p>Square corner velocity is defined as:</p>
+
+<p>The maximum velocity (in mm/s) that the toolhead may travel a 90 degree corner at. A non-zero value can reduce changes in extruder flow rates by enabling instantaneous velocity changes of the toolhead during cornering. This value configures the internal centripetal velocity cornering algorithm; corners with angles larger than 90 degrees will have a higher cornering velocity while corners with angles less than 90 degrees will have a lower cornering velocity. If this is set to zero then the toolhead will decelerate to zero at each corner. The default is 5mm/s.</p>
+
+<h3 id="update-controller-path">Update Controller Path</h3>
+
+<p>Locate the section starting with <strong>[mcu]</strong>.  The V2 will have an additional section starting with <strong>[mcu z]</strong> as it has two controllers.  These sections are where the controllers are defined and identifying them so that Klipper which which components are connected (and to which controller if there is more than one).</p>
+
+<ul>
+  <li>Begin with all controllers disconnected from the Raspberry Pi.</li>
+  <li>For printers with just one controller, connect that controller to the Raspberry Pi.  For printers with two controllers, connect the X/Y/E controller.</li>
+  <li>On the Raspberry Pi, run <code class="language-plaintext highlighter-rouge">ls /dev/serial/by-id/</code>.</li>
+  <li>The listing should look similar to this:</li>
+</ul>
+
+<p><img src="./images/one_mcu.png" alt="" /></p>
+
+<p><strong>Note:</strong> If the device identifier has the word ‘marlin’ in it, the Klipper firmware is not loaded properly.  Go back and <a href="./#firmware-flashing">re-load the Klipper firmware</a> before continuing.</p>
+
+<ul>
+  <li>Copy the device ID (e.g. <em>usb-Klipper_lpc1768_1FB0000802094AAF07825E5DC52000F5-if00</em>) from the terminal window and paste into a temporary text file.</li>
+  <li><a href="#editing-printercfg">Open</a> the configuration file and navigate to the <strong>[mcu]</strong> section.  Modiffy the “serial: /dev/serial” line and paste in the controller path so that is looks like the following: <code class="language-plaintext highlighter-rouge">serial: /dev/serial/by-id/usb-Klipper_lpc1768_1FB0000802094AAF07825E5DC52000F5-if00</code></li>
+  <li>Exit the text editor, and save when prompted.</li>
+</ul>
+
+<h3 id="update-second-controller-path-v2">Update Second Controller Path (V2)</h3>
+
+<p>This section only applies to printers with more than one controller.</p>
+
+<ul>
+  <li>Connect the Z controller to the Raspberry Pi.</li>
+  <li>On the Raspberry Pi, re-run <code class="language-plaintext highlighter-rouge">ls -l /dev/serial/by-id/</code>.</li>
+  <li>The listing should look similar to this:</li>
+</ul>
+
+<p><img src="./images/two_mcu.png" alt="" /></p>
+
+<p><strong>Note:</strong> If the device identifier has the word ‘marlin’ in it, the Klipper firmware is not loaded properly.  Go back and re-load the Klipper firmware before continuing.</p>
+
+<ul>
+  <li>Identify the new device ID (e.g. <em>usb-Klipper_lpc1768_0650000AA39C48AFABD4395DC22000F5-if00</em>) and copy from the terminal window and paste into a temporary text file.</li>
+  <li><a href="#editing-printercfg">Open</a> the configuration file and navigate to the <strong>[mcu z]</strong> section.  Modiffy the “serial: /dev/serial” line and paste in the controller path so that is looks like the following: <code class="language-plaintext highlighter-rouge">serial: /dev/serial/by-id/usb-Klipper_lpc1768_0650000AA39C48AFABD4395DC22000F5-if00</code></li>
+  <li>Exit the text editor with CTRL-X  and save when prompted.</li>
+</ul>
+
+<h3 id="updating-printer-specific-settings">Updating Printer Specific Settings</h3>
+
+<ol>
+  <li><a href="#editing-printercfg">Open</a> printer.cfg file again and scan through the file.</li>
+  <li>Locate <strong>[stepper_x]</strong>.  Uncomment the <em>position_endstop</em> and <em>position_max</em> that corresponds to your printer’s size and delete the other options to prevent confusion.</li>
+  <li>Under <strong>[tmcXXXX stepper_x]</strong>, replace XXXX with either 2208 or 2209 to match the type of TMC drivers that are installed.  For example, <em>[tmc2209</em> <em>stepper_x]</em> for TMC 2209 drivers.</li>
+  <li>Repeat steps 2 &amp; 3 for the <strong>[stepper_y]</strong> section.</li>
+  <li>Under <strong>[stepper_z]</strong>, uncomment <em>position_max</em> for your printer size and delete the other options to prevent confusion.  Also in the same method as step 3, update the <strong>[tmcXXXX_stepper]</strong> for configuration with the installed stepper type for all four Z motors (Z, Z1, Z2, Z3 as applicable).</li>
+  <li>Under <strong>[extruder]</strong> verify that the <em>sensor_type</em> is correct.  Do not worry about <em>step_distance</em> or PID values for now, they will be updated later in the setup process.  Update <strong>[tmcXXXX extruder]</strong> in the same fashion as step 3 to match the installed stepper driver for the extruder.</li>
+  <li>Under <strong>[heater_bed]</strong>, verify the temperature sensor type is correct.</li>
+  <li>Under <strong>[display]</strong>, uncomment the display section that matches the installed display.  Delete the others to prevent confusion.</li>
+  <li><strong>If printer is a V1</strong>, Under <strong>[z_tilt]</strong> and <strong>[screws_tilt_adjust]</strong>, uncomment the sections appropriate to the printer size.  Delete the other options to prevent confusion.</li>
+  <li><strong>If printer is a V2</strong>, Under <strong>[quad_gantry_level]</strong>, uncomment the <em>gantry_corners</em> and <em>points</em> sections appropriate to the printer size.  Delete the other options to prevent confusion.</li>
+  <li>Exit the text editor with CTRL-X  and save when prompted.</li>
+</ol>
+
+<h3 id="additional-changes-mainsailos-only">Additional Changes: MainsailOS only</h3>
+<ol>
+  <li>Add the following entry to your printer.cfg:
+    <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[include mainsail.cfg]</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="additional-changes-fluiddos-only">Additional Changes: FluiddOS only</h3>
+
+<ol>
+  <li>Add the following entries to your printer.cfg:
+    <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[include fluidd.cfg]</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<blockquote>
+  <h3 id="community-references">Community References</h3>
+
+  <p><a href="../../community/howto/120decibell/calculating_driver_current.md">Calculating Driver Current Settings</a></p>
+
+</blockquote>
+
+<h3 id="restart-to-take-effect">Restart to take effect</h3>
+
+<p>Under Mainsail or Fluidd’s console, or Octoprint’s terminal tab type <code class="language-plaintext highlighter-rouge">FIRMWARE_RESTART</code> and press enter to send the command to restart Klipper.</p>
+
+<p>The console window should show the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Recv: // Klipper state: Disconnect
+[...]
+Recv: // Klipper state: Ready
+</code></pre></div></div>
+
+<p>If after 30-60 seconds there is no Ready message, then run <code class="language-plaintext highlighter-rouge">STATUS</code> in the terminal window.  If Klipper comes back <em>Not Ready</em> it will notify if there is a configuration issue that needs to be corrected.</p>
+
+<hr />
+<h3 id="next-initial-startup">Next: <a href="../startup/index.md">Initial Startup</a></h3>
+:ET

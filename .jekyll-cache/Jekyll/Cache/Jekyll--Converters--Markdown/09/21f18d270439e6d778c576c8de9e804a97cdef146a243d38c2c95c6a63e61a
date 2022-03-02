@@ -1,0 +1,31 @@
+I"}<h1 id="klipper-common-errors">Klipper Common Errors</h1>
+
+<h4 id="retrieve-log-file-octoprint">Retrieve Log File (Octoprint)</h4>
+
+<p>The Klippy log file (/tmp/klippy.log) contains debugging information.
+Execute the <code class="language-plaintext highlighter-rouge">M112</code> command in the OctoPrint terminal window immediately after the undesirable event.</p>
+
+<p>There is also a logextract.py script that may be useful when analyzing a micro-controller shutdown or similar problem.  To use it follow this procedure:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir work_directory
+cd work_directory
+cp /tmp/klippy.log .
+~/klipper/scripts/logextract.py ./klippy.log
+</code></pre></div></div>
+
+<p>The script will extract the printer config file and MCU shutdown information to work_directory.</p>
+
+<p><em>Mainsail and Fluidd have built-in tools to extract and downlaod the klippy.log.</em></p>
+
+<h4 id="tmc-uart-error">TMC UART Error</h4>
+
+<p>This appears when the communication between the TMC drivers and the MCU is not working. Typically this means that you have not powered the SKR board with 12-24V (TMC drivers didn’t boot), you haven’t plugged in the TMC steppers to the correct spots, or you forgot to add or remove a jumper as detailed above.</p>
+
+<h4 id="adc-error">ADC Error</h4>
+
+<p>ADC stands for “Analog to Digital Converter” and is what is used to convert thermistor readings to temperatures for your hotend and heated bed. As a safety precaution, if Klipper is expecting a thermistor to be plugged in but it is reading an invalid reading (no thermistor = open, or 0 ohms for a shorted wire as closed), it will go in to this shut down mode. Double check to make sure your thermistors are plugged in to the correct boards and plugs.</p>
+
+<h4 id="unable-to-connect">Unable to Connect</h4>
+
+<p>Once the underlying issue is corrected, use the <code class="language-plaintext highlighter-rouge">FIRMWARE_RESTART</code> command to reset the firmware, reload the config, and restart the host software. Check MCU IDs match your printer.cfg.  <em>Make sure you get the paths right!</em></p>
+:ET

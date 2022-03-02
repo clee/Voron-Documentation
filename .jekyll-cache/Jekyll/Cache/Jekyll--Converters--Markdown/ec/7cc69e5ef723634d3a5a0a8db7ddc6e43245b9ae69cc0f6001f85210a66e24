@@ -1,0 +1,23 @@
+I"{<h1 id="blob-of-death">Blob of Death</h1>
+
+<p>Wake up from running an overnight print of ABS and find this?</p>
+
+<p><img src="./images/blob_1.jpg" alt="" /></p>
+
+<p><img src="./images/blob_2.jpg" alt="" /></p>
+
+<p>Do not panic!  It is recoverable.</p>
+
+<ol>
+  <li>Remove all parts that can be easily removed - back half of mount, zip ties, screws, etc.  (A pair of heavy diagonal pliers may help)</li>
+  <li>Find / purchase an acetone-proof container.  Local hardware stores frequently carry metal paint cans which work well for this purpose.</li>
+  <li>While at the hardware store, purchase some acetone.  Typically found in most paint / stain sections.</li>
+  <li>With some solid steel or copper wire, suspend what is left of the toolhead by the hot end itself from the lid of the container.</li>
+  <li>Pour some actone into the bottom of the container.</li>
+  <li>Lower everyting into the container so that the toolhead is suspended at least an inch or two above the acetone, and close the lid.</li>
+  <li>The acetone vapors will begin to melt the ABS.  <img src="./images/blob_suspended.jpg" alt="" /></li>
+  <li>Check on it every few days, the softened ABS may need to be scraped away to allow the acetone vapors to reach the still-hard ABS.</li>
+  <li>Eventually all of the ABS can be removed, some final cleanup will be required. <img src="./images/blob_removed_hotend.jpg" alt="" /></li>
+</ol>
+
+:ET

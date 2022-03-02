@@ -1,0 +1,33 @@
+I"V<h1 id="troubleshooting">Troubleshooting</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Guide Name / Link</th>
+      <th>Author</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="./120decibell/blob_of_death.md">Blob of Death</a></td>
+      <td>120decibell</td>
+    </tr>
+    <tr>
+      <td><a href="./eddie/klipper_common_errors.md">Klipper Common Errors</a></td>
+      <td>eddie</td>
+    </tr>
+    <tr>
+      <td><a href="./shiftingtech/printer.cfg_changes.md">printer.cfg Changes</a></td>
+      <td>shiftingtech</td>
+    </tr>
+    <tr>
+      <td><a href="./badnoob/rail_misalignment_causing_twist.md">Rail Misalignment Causing Twist</a></td>
+      <td>badnoob</td>
+    </tr>
+    <tr>
+      <td><a href="./bryansj/twisted_x_extrusion_diagnostics.md">Twisted X Extrusion Diagnostics</a></td>
+      <td>Bryansj</td>
+    </tr>
+  </tbody>
+</table>
+:ET

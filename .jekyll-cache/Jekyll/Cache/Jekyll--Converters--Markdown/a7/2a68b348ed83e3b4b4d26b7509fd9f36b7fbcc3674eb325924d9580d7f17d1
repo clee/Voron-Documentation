@@ -1,0 +1,116 @@
+I"B<h1 id="chamber-temperature--exhaust-fan">Chamber Temperature &amp; Exhaust Fan</h1>
+
+<p>While the two functions can be combined, if doing just chamber temperature the process is slightly different so they are documented separately.  The exhaust fan is already configured as part of the default build so no information on installation is provided.</p>
+
+<h3 id="references">References</h3>
+
+<p>https://github.com/alchemyEngine/VoronUsers/tree/master/firmware_configurations/klipper/alch3my</p>
+
+<h2 id="thermistor-wiring">Thermistor Wiring</h2>
+
+<ul>
+  <li>Place the chamber temperature thermistor in the selected location and run the cables down to MCU Z.</li>
+  <li>Plug the thermistor connector into MCU Z, TH0 (z:P0.24)</li>
+</ul>
+
+<h2 id="klipper-configuration">Klipper Configuration</h2>
+
+<h3 id="chamber-temperature-only">Chamber Temperature Only</h3>
+
+<p>If <em>just</em> doing chamber temperature monitoring, add the following code to the printer configuration.</p>
+
+<p><strong>Note:</strong> Confirm that the thermistor type matches the type used.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[temperature_sensor chamber]</span>
+<span class="err">sensor_type:</span> <span class="err">NTC</span> <span class="err">100K</span> <span class="err">beta</span> <span class="err">3950</span>
+<span class="err">sensor_pin:</span> <span class="err">z:P0.24</span>
+<span class="err">min_temp:</span> <span class="err">0</span>
+<span class="err">max_temp:</span> <span class="err">100</span>
+<span class="err">gcode_id:</span> <span class="err">C</span>
+</code></pre></div></div>
+
+<p>Restart Klipper with a <code class="language-plaintext highlighter-rouge">FIRMWARE_RESTART</code>.</p>
+
+<h3 id="temperature-controlled-exhaust-fan">Temperature Controlled Exhaust Fan</h3>
+
+<p>To have the exhaust fan controlled by the chamber temperature, do the following.</p>
+
+<ul>
+  <li>Comment out the entire section with the header <code class="language-plaintext highlighter-rouge">[heater_fan exhaust_fan]</code></li>
+  <li>Add the following section</li>
+</ul>
+
+<p><strong>Note:</strong> Confirm that the thermistor type matches the type used.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[temperature_fan chamber]</span>
+<span class="err">pin:</span> <span class="err">z:P2.7</span>
+<span class="err">max_power:</span> <span class="err">1.0</span>
+<span class="err">shutdown_speed:</span> <span class="err">0.0</span>
+<span class="err">kick_start_time:</span> <span class="err">5.0</span>
+<span class="err">cycle_time:0.01</span>
+<span class="err">off_below:0.1</span>
+<span class="err">sensor_type:</span> <span class="err">NTC</span> <span class="err">100K</span> <span class="err">beta</span> <span class="err">3950</span>
+<span class="err">sensor_pin:</span> <span class="err">z:P0.24</span>
+<span class="err">min_temp:</span> <span class="err">0</span>
+<span class="err">max_temp:</span> <span class="err">70</span>
+<span class="err">target_temp:</span> <span class="err">35.0</span>
+<span class="err">control:</span> <span class="err">watermark</span>
+<span class="err">gcode_id:</span> <span class="err">C</span>
+</code></pre></div></div>
+
+<p>Add another section with a new macro.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[gcode_macro M141]</span>
+<span class="err">default_parameter_S:</span> <span class="err">0</span>
+<span class="err">default_parameter_P:</span> <span class="err">0</span>
+<span class="err">gcode:</span>
+    <span class="err">SET_TEMPERATURE_FAN_TARGET</span> <span class="py">temperature_fan</span><span class="p">=</span><span class="s">"chamber"</span> <span class="s">target={S}</span>
+</code></pre></div></div>
+
+<p>Restart Klipper with a <code class="language-plaintext highlighter-rouge">FIRMWARE_RESTART</code>.</p>
+
+<p>With this configuration, the fan will run at 100% anytime the chamber temperature is above 35C.  The temperature is configurable later.</p>
+
+<p><em>Note: As of Klipper 0.8.0, the fan speed is not dynamically changeable using the temperature_fan object.</em></p>
+
+<h2 id="octoprint-configuration">OctoPrint Configuration</h2>
+
+<p>In Octoprint, enable the chamber temperature sensor by going into  Settings -&gt; Printer Profiles -&gt; Printer.  Edit the profile and go under “Print bed and Build volume”.  Locate the checkbox for “Heated Chamber” and enable it.</p>
+
+<p><img src="./images/octoprint_chamber_temp_checkbox.png" alt="" /></p>
+
+<p>The chamber temperature will now be displayed and graphed in the temperature chart.  None of the Voron printers include a chamber heater so setting the chamber temperature will not function.</p>
+
+<h2 id="display-configuration">Display Configuration</h2>
+
+<p>To display the chamber temperature on the front panel display, additional configuration is required.</p>
+
+<ul>
+  <li>Download the <a href="./lcd_tweaks.cfg">lcd_tweaks.cfg</a> configuration file and load onto the Pi.</li>
+  <li>Edit <em>printer.cfg</em> and add the line <code class="language-plaintext highlighter-rouge">[include lcd_tweaks.cfg]</code> to include the file.</li>
+  <li>If only doing chamber temperature, edit the line
+<!--  -->
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% set chamber = printer['temperature_fan chamber'] %}
+</code></pre></div>    </div>
+    <!--  -->
+    <p>and replace with
+<!--  --></p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% set chamber = printer['temperature_sensor chamber'] %}
+</code></pre></div>    </div>
+    <!--  -->
+  </li>
+  <li>Restart Klipper with a <code class="language-plaintext highlighter-rouge">FIRMWARE_RESTART</code></li>
+  <li>If the display does not come on or only partially displays, check the <code class="language-plaintext highlighter-rouge">/tmp/klippy.log</code> for more information.</li>
+</ul>
+
+<h2 id="exhaust-fan-temperature-control-if-chosen">Exhaust Fan Temperature Control (if chosen)</h2>
+
+<p>In the slicer or with other commands, run the <code class="language-plaintext highlighter-rouge">M141</code> command anytime to change the set point of the exhaust fan.</p>
+
+<p>For example:</p>
+
+<ul>
+  <li>Place a <code class="language-plaintext highlighter-rouge">M141 S70</code> in the start g-code to hold the chamber at a high temperature for the duration of the print</li>
+  <li>Place a <code class="language-plaintext highlighter-rouge">M141 S35</code> in the ending g-code to cooldown the chamber after a print is completed.</li>
+</ul>
+:ET

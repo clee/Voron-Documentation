@@ -1,0 +1,10 @@
+I";<h1 id="octoprint-serial-timeout">OctoPrint Serial Timeout</h1>
+
+<p>OctoPrint has built-in timeout for the internal serial connection to Klipper.  Some of the macros such as <code class="language-plaintext highlighter-rouge">PRINT_START</code> can take a long time to execute and cause Octoprint to disconnect.  Instead of increasing the timeouts, add one or more of the macro names to the list of long-running commands.</p>
+
+<p>The long-running commands can be found under ‘Settings’ -&gt; ‘Serial Connection’ -&gt; ‘Firmware &amp; Protocol’. Then under ‘Protocol Fine Tuning’, expand the ‘Advanced’ section to locate the ‘Long Running Commands’ list.</p>
+
+<p><img src="./images/octoprint_settings_serial_firmware.png" alt="" /></p>
+
+<p><img src="./images/firmware_protocol_advanced.png" alt="" /></p>
+:ET

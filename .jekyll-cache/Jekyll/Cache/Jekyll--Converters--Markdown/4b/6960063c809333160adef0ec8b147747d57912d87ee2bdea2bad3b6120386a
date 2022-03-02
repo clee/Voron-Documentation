@@ -1,0 +1,112 @@
+I"�<h1 id="v2-gantry-wires">V2 Gantry Wires</h1>
+
+<p>This chart only includes what goes into the cable chains to the gantry.  It does NOT include exhaust fan, filament runout sensor, or wiring of anything at or below the bed.</p>
+
+<h3 id="lengths">Lengths</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>250^3</th>
+      <th>300^3</th>
+      <th>350^3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>X (Toolhead)</td>
+      <td>270cm</td>
+      <td>285cm</td>
+      <td>300cm</td>
+    </tr>
+    <tr>
+      <td>Y (Endstop pod)</td>
+      <td>205cm</td>
+      <td>215cm</td>
+      <td>225cm</td>
+    </tr>
+    <tr>
+      <td>Z (AB Motors)</td>
+      <td>150cm</td>
+      <td>155cm</td>
+      <td>160cm</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="wire-counts">Wire Counts</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>Signal</th>
+      <th>24AWG</th>
+      <th>20 AWG</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>X</td>
+      <td>Hot End Heater</td>
+      <td> </td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Thermistor</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Extruder Motor</td>
+      <td>4</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Inductive Probe</td>
+      <td>3</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Hot End Fan</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Part Fan</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Y</td>
+      <td>X Endstop</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Y</td>
+      <td>Y Endstop</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>A Motor</td>
+      <td>4</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>B Motor</td>
+      <td>4</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+:ET

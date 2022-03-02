@@ -1,0 +1,63 @@
+I"J
+<h1 id="macros">Macros</h1>
+
+<p>Macros are an essential tool for configuring and managing Klipper.  A number of macros are pre-defined in the example configurations but a lot more is possible.</p>
+
+<p>Klipper macros are always in the following format:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[gcode_macro &lt;macro_name&gt;]
+gcode:
+    &lt;gcode&gt;
+    &lt;gcode&gt;
+</code></pre></div></div>
+
+<p><strong>Important:</strong> The tab / spaces before the gcode is required.</p>
+
+<h2 id="required--pre-built">Required / Pre-built</h2>
+
+<p>To see examples of the macros themselves, look at the standard printer.cfg for the printer.</p>
+
+<h3 id="homing-override--safe-z-home">Homing Override / Safe Z Home</h3>
+
+<p>By default, all printers are setup with a <code class="language-plaintext highlighter-rouge">[homing_override]</code> configuration section that includes a gcode macro for the home process.  This macro is updating during thee setup process to define the Z endstop location.  However the homing override method always homes X and Y before homing Z.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">[safe_z_home]</code> configuration allows for a Z homing process without requiring a repeat home of X and Y.  To enable safe z homing disable homing override and provide a X,Y coordinate of your Z endstop pin.  Be aware that enabling safe Z home will likely require a change in other processes / macros.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[safe_z_home]
+home_xy_position: 175.5,253
+z_hop: 5.0
+</code></pre></div></div>
+
+<h3 id="g32">G32</h3>
+
+<p>The G32 macro is included with the stock configuration for most printers.  This is typically used as a “full home” process that will home and perform leveling / tilt adjustments.</p>
+
+<h3 id="print_start">PRINT_START</h3>
+
+<p>The PRINT_START macro is called at the start of every print by slicers that are confgured to be aware of it.</p>
+
+<h3 id="print_end">PRINT_END</h3>
+
+<p>The PRINT_END macro is called at the end of every print by slicers that are configured to be aware of it.</p>
+
+<h2 id="user-macros">User Macros</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Creator</th>
+      <th>Macros</th>
+      <th>Bed Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="./macros/120decibell.md">120decibell</a></td>
+      <td>CG28, G32, G141, PURGE_BUCKET, TEST_SPEED_FAST</td>
+      <td>350mm</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>Contributors - please make sure your macros are well documented!</em></p>
+:ET

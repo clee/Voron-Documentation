@@ -1,0 +1,17 @@
+I"�<h1 id="first-print">First Print</h1>
+
+<p>Download the “voron_design_cube_v7.stl” from the <a href="https://github.com/VoronDesign/Voron-2/tree/Voron2.4/STLs/TEST_PRINTS">Voron Github page</a>, and open the file in the chosen slicer. Use the default slicer settings, but make sure the hotend temperature and bed temperature is correct for the filament you are using. A good starting point is 240C hotend temperature, 100C heated bed temperature, and 92% flow for ABS.</p>
+
+<p>Slice the file and save the .gcode file to your desktop (if you haven’t set up the Octoprint Plugin or your slicer, Mainsail and Fluidd do not need plugins). Navigate to Octoprint, Mainsail, or Fluidd in your web browser, and upload the file. Press “Print” and closely watch the beginning of the print. If your nozzle is too far or close to the bed, on your printer display press the knob, navigate to “Tune”, and adjust the Z offset distance (+ is further from the bed, - is closer).</p>
+
+<p>Once you are printing (with your printer fully assembled), take a quick video, upload it to the Voron subreddit and eat a well deserved bowl of cereal!</p>
+
+<p><img src="./images/voron_cereal.png" alt="" /></p>
+
+<h1 id="next-steps">Next Steps</h1>
+
+<p>Done with your cereal?  The printer’s not not done yet!  There is still lots of adjusting to do so the printer can turn out high speed perfection.</p>
+
+<p>Head over to the <a href="../../tuning/index.md">Tuning Guides</a> and dial it in.</p>
+
+:ET

@@ -1,0 +1,65 @@
+<h1 id="skr-mini-e3-v12-klipper-firmware">SKR mini E3 V1.2 Klipper Firmware</h1>
+
+<h3 id="required-items">Required Items</h3>
+
+<ul>
+  <li>Klipper must be installed onto the Raspberry Pi</li>
+  <li>At least one microSD card needs to be available depending on number of controllers.</li>
+</ul>
+
+<h3 id="build-firmware-image">Build Firmware Image</h3>
+
+<ul>
+  <li>Login to the Raspberry Pi</li>
+  <li>Run the following:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install make
+cd ~/klipper
+make menuconfig
+</code></pre></div></div>
+
+<p>In the menu structure there are a number of items to be selected.</p>
+
+<ul>
+  <li>Ensure that the micro-controller architecture is set to ‘STM32’</li>
+  <li>Ensure that the processor model is set to ‘STM32F103’</li>
+  <li>Ensure that  “Enable extra low-level configuration options” is selected</li>
+  <li>Ensure that the Bootloader offset is set to ‘28KiB’</li>
+  <li>Ensure that “Use USB for communication (instead of serial)” is selected</li>
+  <li>Ensure that “GPIO pins to set at micro-controller startup” contains ‘!PC13’.</li>
+</ul>
+
+<p><img src="./images/miniE3_v12_klipper_menuconfig.png" alt="" /></p>
+
+<p>Once the configuration is selected, select “Exit” and “Yes” if asked to save the configuration.</p>
+
+<p>Run the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make clean
+make
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">make</code> command, when completed, creates a firmware file <strong>klipper.bin</strong> that is store in the folder <code class="language-plaintext highlighter-rouge">/home/pi/klipper/out</code>.  This file need to be copied to the Mini E3 board.  The easiest way to do this is to use a GUI like <a href="https://winscp.net/eng/download.php">WinSCP</a> on Windows or either <a href="https://cyberduck.io">Cyberduck</a> or scp (from terminal) on Mac to copy the file to your computer.</p>
+
+<p><img src="./images/cyberduck_example.png" alt="" /></p>
+
+<h3 id="load-firmware-image">Load Firmware Image</h3>
+
+<p>Copy the <strong>klipper.bin</strong> to the desktop, then rename it to <strong>firmware.bin</strong></p>
+
+<p><strong>Important:</strong> If the file is not renamed, the bootloader will not be updated properly.</p>
+
+<p>Ensure that the Mini E3 board is not powered, then remove the microSD card that is installed.</p>
+
+<p>Connect the microSD card to the computer with the <strong>firmware.bin</strong> file.  Open the microSC card in the file browser.  There will be a file named ‘firmware.cur’, that file can be deleted or left alone, it will be overwritten later.</p>
+
+<p>Copy the <strong>firmware.bin</strong> from the desktop onto the microSD card.  If problems are encountered transferring the file(s) to the microSD card, reformat the microSD card with a FAT32 filesystem and try again.</p>
+
+<p>Replace the microSD card into the Mini E3.</p>
+
+<p>Turn on the power supply to power on the Mini E3 board.  If named properly, the SKR will automatically update with the Klipper firmware.</p>
+
+<p><strong>Important:</strong> If the Mini E3 is not powered with 12-24V, Klipper will be unable to communicate with the TMC drivers via UART and the Mini E3 will automatically shut down.</p>
+
+<h3 id="back-to-software-installation">Back to <a href="./index.md#klipper-octoprint-configuration">Software Installation</a></h3>

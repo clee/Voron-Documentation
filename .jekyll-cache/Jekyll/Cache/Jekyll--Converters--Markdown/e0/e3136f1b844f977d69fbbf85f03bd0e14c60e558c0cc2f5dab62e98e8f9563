@@ -1,0 +1,251 @@
+I"�'<h1 id="max31865-pt100-guide">MAX31865 PT100 Guide</h1>
+
+<h2 id="parts">Parts</h2>
+
+<ol>
+  <li>PT100 Sensor</li>
+  <li>MAX31865 Board</li>
+  <li>Depending on your config, Dupont Jumper Cables</li>
+</ol>
+
+<h3 id="pt100-sensor-options">PT100 Sensor Options</h3>
+
+<p>Many 3D printer part manufacturers (like <a href="https://e3d-online.com/products/pt100-temperature-sensor">E3D</a> or <a href="https://www.aliexpress.com/item/32828593452.html">Trianglelab</a>) sell 2-wire PT100 sensors in the v6 thermistor form factor. You can use these options on most of the hotends we recommend including the v6, Dragon, Dragonfly, Mosquito/Spider, and more.</p>
+
+<p>3-wire PT100 sensors are also an option. The advantage with this option is theoretically more accurate readings and reduced fluctuation caused by electrical noise on the readings. These are harder to source, but they can still be found in v6 form factor on <a href="https://www.aliexpress.com/item/32811983096.html">Aliexpress</a>. These will require a different configuration of the jumpers on your MAX31865 boards.</p>
+
+<h3 id="max31865-board-options">MAX31865 Board Options</h3>
+
+<p>The easiest to use option is Ray’s PT100 stick. It slots into a stepstick slot on your SKR board, and the PT100 is connected via the stepper motor connector. This also eliminates the need for jumper cables, so the setup is cleaner, and more reliable (SPI bus doesn’t like traveling on wires) This option is slightly more expensive then Adafruit/Clone/CJMCU option and it is harder to source, but it can be found on <a href="https://www.aliexpress.com/item/1005001698429473.html">Aliexpress</a>, or can be ordered from a PCB manufacturer by providing them the <a href="https://github.com/raymondh2/PT100Stick/tree/master/Production/Gerbers">gerbers</a>.</p>
+
+<p>Another option is using an Adafruit/Clone/CJMCU MAX31865 module. These can be found on <a href="https://www.adafruit.com/product/3328">Adafruit’s website</a>, <a href="https://www.aliexpress.com/item/33009505368.html">Aliexpress</a> and many other online stores. The primary difference between the Adafruit/Clone and CJMCU modules is the size (CJMCU is smaller) and the order of the pins.</p>
+
+<h2 id="step-1-jumping-pads">Step 1: Jumping Pads</h2>
+
+<p>This step requires soldering. You need to bridge some pads to configure your MAX31865 board to work with your PT100 sensor. The pads to jump are marked with red rectangles and traces to cut are marked with a red “x”.</p>
+
+<h3 id="2-wire-pt100-sensors">2-Wire PT100 Sensors</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">PT100 Stick</th>
+      <th>Adafruit/Clone</th>
+      <th>CJMCU</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">The PT100 stick now comes pre-configured to work with 2-wire PT100 sensors. You can skip this step.</td>
+      <td><img src="./images/PT100_2.jpg" alt="" /></td>
+      <td><img src="./images/PT100_3.png" alt="" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="3-wire-pt100-sensors">3-Wire PT100 Sensors</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">PT100 Stick</th>
+      <th>Adafruit/Clone</th>
+      <th>CJMCU</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><img src="./images/PT100_1.png" alt="" /></td>
+      <td><img src="./images/PT100_4.jpg" alt="" /></td>
+      <td><img src="./images/PT100_5.png" alt="" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="4-wire-pt100-sensors">4-Wire PT100 Sensors</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">PT100 Stick</th>
+      <th>Adafruit/Clone</th>
+      <th>CJMCU</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><img src="./images/PT100_6.jpg" alt="" /></td>
+      <td>This module comes pre-configured to work with 4-wire PT100 sensors. You can skip this step.</td>
+      <td>This module comes pre-configured to work with 4-wire PT100 sensors. You can skip this step.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="step-2-soldering-headersterminals">Step 2: Soldering Headers/Terminals</h2>
+
+<p>This step is self explanatory. Solder the headers and the screw terminals (only on Adafruit/Clone/CJMCU) on your board.</p>
+
+<h2 id="step-3-jumpers-on-skr">Step 3: Jumpers on SKR</h2>
+
+<p>Remove the jumpers marked with green and add jumpers marked with blue.</p>
+
+<h3 id="skr-v13">SKR v1.3</h3>
+
+<p><img src="./images/pt100_7.jpg" alt="" /></p>
+
+<h3 id="skr-v14">SKR v1.4</h3>
+
+<p><img src="./images/pt100_8.jpg" alt="" /></p>
+
+<h2 id="step-4-wiring">Step 4: Wiring</h2>
+
+<h3 id="pt100-stick">PT100 Stick</h3>
+
+<p>Insert your PT100 stick to the E1 stepper driver slot. Pay attention to the orientation. The “EN” pin is marked on the PT100 stick, and it should match the “EN” pin on your board.</p>
+
+<p><img src="./images/pt100_9.jpg" alt="" /></p>
+
+<h3 id="adafruitclone">Adafruit/Clone</h3>
+
+<p>Connect the SPI pins to the E1 Stepstick Slot:</p>
+
+<p><img src="./images/pt100_10.jpg" alt="" /></p>
+
+<p>Connect VIN (not 3V3) and GND to free 3V3 and GND pins available on your SKR board. Here is a recommendation:</p>
+
+<p><img src="./images/pt100_12.jpg" alt="" /></p>
+
+<h3 id="cjmcu">CJMCU</h3>
+
+<p>Connect the SPI pins to the E1 Stepstick Slot:</p>
+
+<p><img src="./images/pt100_11.jpg" alt="" /></p>
+
+<p>Connect VIN (not 3V3) and GND to free 3V3 and GND pins available on your SKR board. Here is a recommendation:</p>
+
+<p><img src="./images/pt100_12.jpg" alt="" /></p>
+
+<h2 id="step-5-wiring-pt100">Step 5: Wiring PT100</h2>
+
+<ul>
+  <li>For PT100 Stick: Connect to the E1 stepper connector.</li>
+  <li>For Adafruit/Clone/CJMCU: Connect to the screw terminals.</li>
+</ul>
+
+<p><img src="./images/PT100_15.jpg" alt="" /></p>
+
+<p><em>For 3-Wire sensors, the side you wire 2 wires is the side with the jumped pads marked with 3-wire</em></p>
+
+<h2 id="step-6-klipper-configuration">Step 6: Klipper Configuration</h2>
+
+<ol>
+  <li>SSH into your rPi and edit your printer.cfg file using nano.</li>
+  <li>Remove any old thermistor configuration under [extruder]. (sensor_type, sensor_pin, etc.)</li>
+  <li>Under [extruder] add these lines:</li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>SKR v1.3</th>
+      <th>SKR v1.4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>sensor_type: MAX31865<br />sensor_pin: P1.1<br />spi_speed: 4000000<br />spi_software_sclk_pin: P0.4<br />spi_software_mosi_pin: P4.28<br />spi_software_miso_pin: P0.5<br />rtd_nominal_r: 100<br />rtd_reference_r: 430</td>
+      <td>sensor_type: MAX31865<br />sensor_pin: P1.1<br />spi_speed: 4000000<br />spi_software_sclk_pin: P0.4<br />spi_software_mosi_pin: P1.17<br />spi_software_miso_pin: P0.5<br />rtd_nominal_r: 100<br />rtd_reference_r: 430</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>
+    <p>Add this line &amp; edit it for the pt100 sensor you used: <code class="language-plaintext highlighter-rouge">rtd_num_of_wires: 2</code></p>
+  </li>
+  <li>
+    <p>If you are in EU or any 50 Hz country add this line: <code class="language-plaintext highlighter-rouge">rtd_use_50Hz_filter: True</code></p>
+  </li>
+  <li>
+    <p>Save your changes by typing CTRL+X, Y, [ENTER]. Send FIRMWARE_RESTART from the console in Octoprint and test! It should work.</p>
+  </li>
+  <li>
+    <p>Run PID tuning. PT100 readings will be different from your previous thermistor. For the best thermal accuracy, follow this to PID tune:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Heat your bed to 100C.
+2. Move your hothend to the center and 5-10 mm above bed
+3. Set fans to 25%: "M106 S64"
+4. Run: "PID_CALIBRATE HEATER=extruder TARGET=245"
+5. This will run for a few minutes. When finished, save with: "SAVE_CONFIG"
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<ul>
+  <li>ADC_OUT_OF_RANGE
+    <ul>
+      <li>If you never get a reading; check your wiring.</li>
+      <li>If you get this error after some time; first try adding a capacitor (explained below), if it doesn’t help, try shielded wires or a 3-wire sensor.</li>
+    </ul>
+  </li>
+  <li>Under &amp; Over Voltage
+    <ul>
+      <li>Possibly a wiring issue, check wiring, replace with thicker wires if possible.</li>
+      <li>Possibly a software SPI issue, try using a Pi MCU (explained below) for troubleshooting.</li>
+      <li>Possibly electrical noise issue, try adding a capacitor (explained below).</li>
+      <li>If nothing helps, try shielded wires or a 3-wire sensor.</li>
+    </ul>
+  </li>
+  <li>RTD_INPUT_DISCONNECTED
+    <ul>
+      <li>Wiring issue, check your wires.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="adding-a-capacitor">Adding a capacitor</h3>
+
+<p>All modules in this guide have a 100 nF capacitor on the RTD input, per MAX31865 spec sheet. This is usually enough, but if there is too much electrical noise, adding another capacitor can help filter the noise and prevent reading errors.</p>
+
+<p>Add a 100-500 nF capacitor between the - and + RTD wires. Here is an example on the Adafruit board:</p>
+
+<p><img src="./images/pt100_13.jpg" alt="" /></p>
+
+<h3 id="pi-mcu">Pi MCU</h3>
+
+<p>This is not recommended as a permanent solution, but it can be used for troubleshooting.</p>
+
+<ol>
+  <li>
+    <p><a href="https://github.com/KevinOConnor/klipper/blob/master/docs/RPi_microcontroller.md">Enable Pi MCU</a></p>
+  </li>
+  <li>
+    <p>Wire according to this diagram:</p>
+
+    <p><img src="./images/PT100_14.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Add at the top of printer.cfg:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[mcu pi]
+serial: /tmp/klipper_host_mcu 
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Replace the MAX31865 lines with these: (change the 50hz filter and wire count according to your setup)</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sensor_type: MAX31865
+sensor_pin: pi:gpio22
+rtd_nominal_r: 100
+rtd_reference_r: 430
+rtd_num_of_wires: 2
+rtd_use_50Hz_filter: True
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Do a FIRMWARE_RESTART and test.</p>
+  </li>
+</ol>
+:ET

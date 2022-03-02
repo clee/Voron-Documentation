@@ -1,0 +1,60 @@
+I"–<h1 id="klicky-probe-as-endstop-with-constant-z-offset">Klicky Probe as Endstop with constant Z-Offset</h1>
+
+<h2 id="benefits">Benefits</h2>
+<ol>
+  <li>Automatically adjusts to any buildplate material and thickness</li>
+  <li>You only need to calibrate one variable: Nozzle-to-switch offset distance, instead of Z-endstop pin and switch body and nozzle</li>
+  <li>Easy to set up</li>
+</ol>
+
+<h2 id="drawbacks">Drawbacks</h2>
+<ol>
+  <li>Your Z-offset will change when you swap nozzles (unless you swap in a nozzle with identical height to the old one). This is the only time <strong>you have to recalibrate your Z-offset!</strong></li>
+  <li>No automatic Z-offset possible.</li>
+</ol>
+
+<h2 id="how-to-set-it-up">How to set it up</h2>
+
+<h3 id="in-klicky-variablescfg">In klicky-variables.cfg</h3>
+<ol>
+  <li>Replace the following lines:
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">variable_z_endstop_x</span><span class="p">:</span> <span class="mi">1000</span>
+  <span class="n">variable_z_endstop_y</span><span class="p">:</span> <span class="mi">1000</span>
+</code></pre></div>    </div>
+    <p>with</p>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">variable_z_endstop_x</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">variable_z_endstop_y</span><span class="p">:</span> <span class="mi">0</span>
+</code></pre></div>    </div>
+    <p>#### Why change variable_z_endstop_ to 0 on both axis?</p>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c"># if a separate Z endstop switch is in use, </span>
+  <span class="c"># specify the coordinates of the switch here (Voron). </span>
+  <span class="c"># Set to 0 to have the probe move to center of bed</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Open your printer.cfg</li>
+  <li>Comment out or Replace in <code class="language-plaintext highlighter-rouge">[stepper_z]</code>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">endstop_pin</span><span class="p">:</span>  
+</code></pre></div>    </div>
+    <p>with</p>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">endstop_pin</span><span class="p">:</span> <span class="n">probe</span><span class="p">:</span><span class="n">z_virtual_endstop</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Comment out <code class="language-plaintext highlighter-rouge">position_endstop</code></li>
+  <li>Set your probe offsets in <code class="language-plaintext highlighter-rouge">[probe]</code> section
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">x_offset</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">y_offset</span><span class="p">:</span> <span class="mf">19.75</span>
+  <span class="n">z_offset</span><span class="p">:</span> <span class="mf">6.42</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Calibrate your z-offset the old fashioned paper way. Make sure to <code class="language-plaintext highlighter-rouge">SAVE TO PROBE</code> and not <code class="language-plaintext highlighter-rouge">SAVE TO ENDSTOP</code>!</li>
+  <li>Enjoy :)</li>
+</ol>
+
+<h2 id="important-notes--tips">Important Notes &amp; Tips</h2>
+
+<p>Always test your freshly-set-up Z-offset on the outer edges of your print surface. If anything goes wrong, you will only scratch the edge and not the middle.</p>
+
+<h3 id="what-if-i-swap-my-nozzle">What if I swap my nozzle?</h3>
+
+<p>If you install a nozzle that is longer than your old one, you need to decrease your [probe] z_offset. If your new nozzle is shorter than the old one, you need to increase the z_offset. If itÂ´s the same length, you can reuse the current value.</p>
+:ET

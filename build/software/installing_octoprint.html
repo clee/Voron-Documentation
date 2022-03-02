@@ -1,0 +1,47 @@
+<h1 id="installing-octoprint">Installing Octoprint</h1>
+
+<p>Install OctoPrint on the Raspberry Pi by following the instructions found at <a href="https://octoprint.org/download/">OctoPrint Download</a></p>
+
+<p>Once installed, ssh to your Raspberry Pi (Using PuTTY on Windows or the terminal on MacOS) at the address <code class="language-plaintext highlighter-rouge">pi@octopi.local</code>.  The default password is ‘raspberry’.  It is highly recommended to change the default password using the following process:</p>
+
+<ul>
+  <li>Login to Raspberry Pi</li>
+  <li><code class="language-plaintext highlighter-rouge">sudo raspi-config</code> (password may be requested again)</li>
+  <li>Select “Change User Password” to change the password</li>
+</ul>
+
+<h3 id="klipper-installation">Klipper Installation</h3>
+
+<p>Once at the command line of the Raspberry Pi, run the following commands to download and install the latest version of Klipper:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd
+git clone https://github.com/KevinOConnor/klipper
+./klipper/scripts/install-octopi.sh
+</code></pre></div></div>
+
+<h3 id="klipper-octoprint-configuration">Klipper Octoprint Configuration</h3>
+
+<p><em>Make sure to only do the testing after Klipper is installed</em></p>
+
+<p>The OctoPrint web server needs to be configured to communicate with the Klipper host software. Using a web browser, login to the OctoPrint web page and then configure the following items:</p>
+
+<ol>
+  <li>Navigate to the Settings tab (the wrench icon at the top of the page)</li>
+  <li>Under “Serial Connection” in “Additional serial ports” add “/tmp/printer” then click “Save”</li>
+  <li>Open Settings tab and under “Serial Connection” change the “Serial Port” setting to “/tmp/printer”</li>
+  <li>In the Settings tab, navigate to the “Behavior” sub-tab and select the “Cancel any ongoing prints but stay connected to the printer” option, then click “Save”</li>
+  <li>From the main page, under the “Connection” section (at the top left of the page) make sure the “Serial Port” is set to “/tmp/printer” and click “Connect”. (If “/tmp/printer” is not an available selection then try reloading the page)</li>
+  <li>Once connected, navigate to the “Terminal” tab and type “status” (without the quotes) into the command entry box and click “Send”. The terminal window will likely report there is an error opening the config file - that means OctoPrint is successfully communicating with Klipper.</li>
+</ol>
+
+<h2 id="recommended-octoprint-plugins">Recommended OctoPrint Plugins</h2>
+<ul>
+  <li>OctoKlipper</li>
+  <li>Themeify</li>
+  <li>TerminalCommands</li>
+  <li>Bed Level Visualizer</li>
+  <li>Print Time Genius</li>
+</ul>
+
+<hr />
+<h3 id="back-software-installation">Back: <a href="./index.md">Software Installation</a></h3>

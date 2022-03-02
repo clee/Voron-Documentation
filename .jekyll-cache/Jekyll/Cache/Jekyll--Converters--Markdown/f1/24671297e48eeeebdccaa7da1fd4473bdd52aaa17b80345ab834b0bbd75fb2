@@ -1,0 +1,171 @@
+I"s5<h1 id="setting-up-and-calibrating-sensorless-xy-homing">Setting Up and Calibrating Sensorless XY Homing</h1>
+
+<p>When using the TMC2130 / TMC2209 / TMC2660 / TMC5160 drivers, the StallGuard feature makes it possible to set up sensorless homing on the X and Y axes for CoreXY machines. The Klipper project <a href="https://www.klipper3d.org/TMC_Drivers.html#sensorless-homing">has a page with documentation and recommendations on getting it working</a>.</p>
+
+<p>Following are some more detailed instructions and suggestions to supplement the Klipper documentation specifically for Vorons.</p>
+
+<h2 id="hardware-setup">Hardware Setup</h2>
+
+<p>You need to configure your hardware properly to enable sensorless homing. This involves two main steps:</p>
+
+<ol>
+  <li>If you currently have Hall Effect or microswitch XY endstops connected to your microcontroller (SKR, Spider, Octopus, E3 mini, SKR Pico, etc), then you must physically pull them out of the microcontroller. <strong>If you leave the physical endstops connected, sensorless homing will not work</strong>.</li>
+  <li>Install jumpers on the relevant DIAG pins to enable sensorless homing on the X and Y stepper drivers.</li>
+</ol>
+
+<h2 id="software-setup">Software Setup</h2>
+
+<h3 id="klipper">Klipper</h3>
+
+<p>You’ll need to modify the <code class="language-plaintext highlighter-rouge">endstop_pin</code> values for <code class="language-plaintext highlighter-rouge">[stepper_x]</code> and <code class="language-plaintext highlighter-rouge">[stepper_y]</code>, by adding a pullup <code class="language-plaintext highlighter-rouge">^</code>, moving the current value into the relevant TMC blocks, and updating the <code class="language-plaintext highlighter-rouge">endstop_pin</code>s to use the <code class="language-plaintext highlighter-rouge">virtual_endstop</code> as described in the following sections.</p>
+
+<p>Also, as the Klipper docs instruct, set the <code class="language-plaintext highlighter-rouge">homing_retract_dist</code> to <code class="language-plaintext highlighter-rouge">0</code>, and make sure your X and Y <code class="language-plaintext highlighter-rouge">homing_speed</code> values are set to half of your <code class="language-plaintext highlighter-rouge">rotation_distance</code> (<code class="language-plaintext highlighter-rouge">homing_speed</code> should be <code class="language-plaintext highlighter-rouge">20</code> for Vorons with 20T pulleys on the A/B motors).</p>
+
+<h4 id="for-tmc2209">For TMC2209</h4>
+
+<p>The following pin examples are from a BTT E3 mini V2; make sure to adjust based on your own configuration.</p>
+
+<p>Before:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[stepper_x]</span>
+<span class="c"># …
+</span><span class="err">endstop_pin:</span> <span class="err">PC0</span>
+
+<span class="nn">[tmc2209 stepper_x]</span>
+<span class="c"># …
+</span>
+<span class="nn">[stepper_y]</span>
+<span class="c"># …
+</span><span class="err">endstop_pin:</span> <span class="err">PC1</span>
+
+<span class="nn">[tmc2209 stepper_y]</span>
+<span class="c"># …
+</span></code></pre></div></div>
+
+<p>After:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[stepper_x]</span>
+<span class="err">endstop_pin:</span> <span class="err">tmc2209_stepper_x:virtual_endstop</span>
+
+<span class="nn">[tmc2209 stepper_x]</span>
+<span class="c"># …
+</span><span class="err">diag_pin:</span> <span class="err">^PC0</span> <span class="c"># use the same pin that was previously the endstop_pin!
+</span><span class="err">driver_SGTHRS:</span> <span class="err">255</span>
+
+<span class="nn">[stepper_y]</span>
+<span class="c"># …
+</span><span class="err">endstop_pin:</span> <span class="err">tmc2209_stepper_y:virtual_endstop</span>
+
+<span class="nn">[tmc2209 stepper_y]</span>
+<span class="c"># …
+</span><span class="err">diag_pin:</span> <span class="err">^PC1</span>     <span class="c"># use the same pin that was previously the endstop_pin!
+</span><span class="err">driver_SGTHRS:</span> <span class="err">255</span> <span class="c"># 255 is most sensitive value, 0 is least sensitive
+</span></code></pre></div></div>
+
+<h4 id="for-tmc5160">For TMC5160</h4>
+
+<p>The following pin examples are from a BTT Octopus Pro; make sure to adjust based on your own configuration.</p>
+
+<p>Before:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[stepper_x]</span>
+<span class="c"># …
+</span><span class="err">endstop_pin:</span> <span class="err">PG6</span>
+
+<span class="nn">[tmc5160 stepper_x]</span>
+<span class="c"># …
+</span></code></pre></div></div>
+
+<p>After:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[stepper_x]</span>
+<span class="c"># …
+</span><span class="err">endstop_pin:</span> <span class="err">tmc5160_stepper_x:virtual_endstop</span>
+
+<span class="nn">[tmc5160 stepper_x]</span>
+<span class="c"># …
+</span><span class="err">diag1_pin:</span> <span class="err">^!PG6</span> <span class="c"># use the same pin that was previously the endstop_pin! 
+</span><span class="err">driver_SGT:</span> <span class="err">-64</span>  <span class="c"># -64 is most sensitive value, 63 is least sensitive
+</span></code></pre></div></div>
+
+<h3 id="finding-the-right-stallguard-threshold">Finding the right StallGuard threshold</h3>
+
+<p>The calibration process is:</p>
+<ul>
+  <li>For TMC2209, start with <code class="language-plaintext highlighter-rouge">SET_TMC_FIELD FIELD=SGTHRS STEPPER=stepper_x VALUE=255</code> in the console. For TMC2130/TMC2660/TMC5160, use <code class="language-plaintext highlighter-rouge">SET_TMC_FIELD FIELD=SGT STEPPER=stepper_x VALUE=-64</code> instead. Start with the most sensitive value for the StallGuard threshold based on which kind of TMC driver you’re using (<code class="language-plaintext highlighter-rouge">255</code> for TMC2209, or <code class="language-plaintext highlighter-rouge">-64</code> for TMC2130/TMC2660/TMC5160).</li>
+  <li>Try running <code class="language-plaintext highlighter-rouge">G28 X0</code> to see if the toolhead moves along the X axis.</li>
+  <li>If your toolhead moves all the way to the end of the rail, <strong>IMMEDIATELY HIT THE EMERGENCY STOP BUTTON</strong>. Go back and double-check that you have configured your hardware and the Klipper sections above correctly. Ask on Discord if you need help.</li>
+  <li>The Klipper documentation is good here, with one exception. This information is not correct:
+    <blockquote>
+      <p>Then issue a G28 X0 command and verify the axis does not move at all.</p>
+    </blockquote>
+
+    <p>When running the <code class="language-plaintext highlighter-rouge">G28 X0</code> or <code class="language-plaintext highlighter-rouge">G28 Y0</code> command, the toolhead <em>WILL</em> move a millimeter or so before it triggers the virtual endstop. This is normal.</p>
+  </li>
+  <li>Assuming that the toolhead moved a millimeter or so and then stopped, change the <code class="language-plaintext highlighter-rouge">VALUE</code> to decrease the sensitivity by 5-10, try again, and keep going until you find the first value that successfully homes your printer. The toolhead should gently tap the edge of travel and then stop.</li>
+  <li>Follow the Klipper instructions on fine-tuning the value once your toolhead is homing successfully on this axis. Make sure you run
+    <pre><code class="language-gcode">G91
+G1 X-10
+</code></pre>
+    <p>to back the toolhead off after hitting the end of the rail (assuming you’re homing to the maximum X value) or else homing the other axis will not work properly.</p>
+  </li>
+  <li>Update the <code class="language-plaintext highlighter-rouge">driver_SGTHRS</code> or <code class="language-plaintext highlighter-rouge">driver_SGT</code> value with your new StallGuard threshold.</li>
+</ul>
+
+<p><strong>Do not forget, you need to repeat this same process for the Y axis.</strong></p>
+
+<h3 id="final-setup">Final setup</h3>
+
+<p>If you have a <code class="language-plaintext highlighter-rouge">[safe_z_home]</code> section, you need to comment out the entire block (not just the <code class="language-plaintext highlighter-rouge">[safe_z_home]</code> line!). Or you could just delete the entire block, but if sensorless homing doesn’t work reliably for you for some reason and you decide you want to go back to a physical endstop setup, you’ll be glad you didn’t delete it.</p>
+
+<p>Now you need to create a <code class="language-plaintext highlighter-rouge">[homing_override]</code> section. The Klipper docs recommend setting up dedicated <code class="language-plaintext highlighter-rouge">SENSORLESS_HOME_X</code>/<code class="language-plaintext highlighter-rouge">SENSORLESS_HOME_Y</code> macros. Here’s a setup that has been working well for several Voron owners (you will probably want to tweak the <code class="language-plaintext highlighter-rouge">HOME_CUR</code> values for your own setup):</p>
+
+<!--  -->
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[gcode_macro _SENSORLESS_HOME_X]</span>
+<span class="err">gcode:</span>
+    <span class="c"># Set current for sensorless homing
+</span>    <span class="err">{%</span> <span class="err">set</span> <span class="py">driver_config</span> <span class="p">=</span> <span class="s">printer.configfile.settings['tmc2209 stepper_x'] %}</span>
+    <span class="err">{%</span> <span class="err">set</span> <span class="py">RUN_CUR</span> <span class="p">=</span> <span class="s">driver_config.run_current|float %}</span>
+    <span class="err">{%</span> <span class="err">set</span> <span class="py">HOME_CUR</span> <span class="p">=</span> <span class="s">0.7 %}</span>
+    <span class="err">SET_TMC_CURRENT</span> <span class="py">STEPPER</span><span class="p">=</span><span class="s">stepper_x CURRENT={HOME_CUR}</span>
+    <span class="c"># Home
+</span>    <span class="err">G28</span> <span class="err">X</span>
+    <span class="c"># Move away
+</span>    <span class="err">G91</span>
+    <span class="err">G1</span> <span class="err">X-10</span> <span class="err">F1200</span>
+    <span class="c"># Set current during print
+</span>    <span class="err">SET_TMC_CURRENT</span> <span class="py">STEPPER</span><span class="p">=</span><span class="s">stepper_x CURRENT={RUN_CUR}</span>
+
+<span class="nn">[gcode_macro _SENSORLESS_HOME_Y]</span>
+<span class="err">gcode:</span>
+    <span class="c"># Set current for sensorless homing
+</span>    <span class="err">{%</span> <span class="err">set</span> <span class="py">driver_config</span> <span class="p">=</span> <span class="s">printer.configfile.settings['tmc2209 stepper_y'] %}</span>
+    <span class="err">{%</span> <span class="err">set</span> <span class="py">RUN_CUR</span> <span class="p">=</span> <span class="s">driver_config.run_current|float %}</span>
+    <span class="err">{%</span> <span class="err">set</span> <span class="py">HOME_CUR</span> <span class="p">=</span> <span class="s">0.7 %}</span>
+    <span class="err">SET_TMC_CURRENT</span> <span class="py">STEPPER</span><span class="p">=</span><span class="s">stepper_y CURRENT={HOME_CUR}</span>
+    <span class="c"># Home
+</span>    <span class="err">G28</span> <span class="err">Y</span>
+    <span class="c"># Move away
+</span>    <span class="err">G91</span>
+    <span class="err">G1</span> <span class="err">Y-10</span> <span class="err">F1200</span>
+    <span class="c"># Set current during print
+</span>    <span class="err">SET_TMC_CURRENT</span> <span class="py">STEPPER</span><span class="p">=</span><span class="s">stepper_y CURRENT={RUN_CUR}</span>
+
+<span class="nn">[homing_override]</span>
+<span class="err">axes:</span> <span class="err">xyz</span>
+<span class="err">gcode:</span>
+  <span class="err">{%</span> <span class="err">set</span> <span class="py">home_all</span> <span class="p">=</span> <span class="s">'X'</span> <span class="s">not in params and 'Y' not in params and 'Z' not in params %}</span>
+
+  <span class="err">{%</span> <span class="err">if</span> <span class="err">home_all</span> <span class="err">or</span> <span class="err">'X'</span> <span class="err">in</span> <span class="err">params</span> <span class="err">%}</span>
+    <span class="err">_SENSORLESS_HOME_X</span>
+  <span class="err">{%</span> <span class="err">endif</span> <span class="err">%}</span>
+  <span class="err">G4</span> <span class="err">P2000</span>
+  <span class="err">{%</span> <span class="err">if</span> <span class="err">home_all</span> <span class="err">or</span> <span class="err">'Y'</span> <span class="err">in</span> <span class="err">params</span> <span class="err">%}</span>
+    <span class="err">_SENSORLESS_HOME_Y</span>
+  <span class="err">{%</span> <span class="err">endif</span> <span class="err">%}</span>
+  <span class="err">{%</span> <span class="err">if</span> <span class="err">home_all</span> <span class="err">or</span> <span class="err">'Z'</span> <span class="err">in</span> <span class="err">params</span> <span class="err">%}</span>
+    <span class="err">G28</span> <span class="err">Z</span>
+    <span class="err">G1</span> <span class="err">Z10</span>
+  <span class="err">{%</span> <span class="err">endif</span> <span class="err">%}</span>
+</code></pre></div></div>
+<!--  -->
+
+<p>Restart Klipper, and now the “Home X”/”Home Y”/”Home Z” buttons in Mainsail and Fluidd will work properly (and so will commands like “G28 X”), using your new sensorless homing setup.</p>
+:ET

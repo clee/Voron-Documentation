@@ -1,0 +1,118 @@
+I"�<h1 id="octopuspro-klipper-firmware">Octopus(Pro) Klipper Firmware</h1>
+
+<p>The firmware update process for both Octopus and Octopus Pro is the same so the guides have been combined.</p>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<ul>
+  <li>Klipper must be installed onto the Raspberry Pi</li>
+  <li>It is desirable, though not strictly necessary to have a small sdcard available</li>
+  <li>Even if you intend to power your Pi with the Octopus, during this flashing process, you will find it far more convenient 
+to power your pi from some other source, such as a regular USB power supply</li>
+  <li>Voron Design recommends using USB to control the Octopus, which simply requires connecting a USB-A to USB-C cable between the Octopus and Pi.  If you prefer a UART connection, please consult the <a href="https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-V1.0/tree/master/Octopus%20works%20on%20Voron%20v2.4/Firmware/Klipper">BigTreeTech documentation</a> for the necessary configuration adjustments</li>
+</ul>
+
+<h3 id="build-firmware-image">Build Firmware Image</h3>
+
+<ul>
+  <li>Login to the Raspberry Pi</li>
+  <li>
+    <p>Run the following:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> sudo apt install make
+ cd ~/klipper
+ make clean
+ make menuconfig
+</code></pre></div>    </div>
+  </li>
+  <li>In the menu structure there are a number of items to be selected.
+    <ul>
+      <li>Select “Enable extra low-level configuration options”</li>
+      <li>Set the micro-controller architecture is set to <code class="language-plaintext highlighter-rouge">STMicroelectronics STM32</code></li>
+      <li>Set the Processor model to <code class="language-plaintext highlighter-rouge">STM32F446</code> or <code class="language-plaintext highlighter-rouge">STM32F429</code> (Depends on the MCU of your motherboard)</li>
+      <li>Set the Bootloader offset to <code class="language-plaintext highlighter-rouge">32KiB bootloader</code></li>
+      <li>Set the Clock Reference to <code class="language-plaintext highlighter-rouge">12 MHz crystal</code>(for <code class="language-plaintext highlighter-rouge">STM32F446</code>) or <code class="language-plaintext highlighter-rouge">8 MHz crystal</code>(for <code class="language-plaintext highlighter-rouge">STM32F429</code>)</li>
+      <li>Set the Communication interface to <code class="language-plaintext highlighter-rouge">USB (on PA11/PA12)</code>  (note: see <a href="https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-V1.0/tree/master/Octopus%20works%20on%20Voron%20v2.4/Firmware/Klipper">BigTreeTech documentation</a> if you intend to use UART rather than USB)</li>
+    </ul>
+
+    <p><img src="./images/octopus_f446_klipper_menuconfig.png" alt="" />
+ <img src="./images/octopus_f429_klipper_menuconfig.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Once the configuration is selected, press <code class="language-plaintext highlighter-rouge">q</code> to exit,  and “Yes” when  asked to save the configuration.</p>
+  </li>
+  <li>Run the command <code class="language-plaintext highlighter-rouge">make</code></li>
+  <li>The <code class="language-plaintext highlighter-rouge">make</code> command, when completed, creates a firmware file <strong>klipper.bin</strong> that is store in the folder <code class="language-plaintext highlighter-rouge">/home/pi/klipper/out</code>.</li>
+</ul>
+
+<p>There are multiple options for getting this firmware file installed onto your Octopus.</p>
+
+<h3 id="firmware-installation">Firmware Installation</h3>
+
+<p><strong>Important</strong>: Please write down these steps or bookmark this page - you might need to repeat the following steps if you update Klipper.</p>
+
+<h4 id="option-1-sdcard-firmware-install">Option 1: SDcard Firmware Install</h4>
+
+<ul>
+  <li>Works regardless of USB vs UART</li>
+  <li>Requires a microSD card</li>
+</ul>
+
+<ol>
+  <li>Execute these commands via SSH to rename the firmware file to <code class="language-plaintext highlighter-rouge">firmware.bin</code>:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/klipper
+mv out/klipper.bin out/firmware.bin
+</code></pre></div>    </div>
+
+    <p><strong>Important:</strong> If the file is not renamed, the bootloader will not be updated properly. The bootloader looks for a file named <code class="language-plaintext highlighter-rouge">firmware.bin</code>.</p>
+  </li>
+  <li>
+    <p>Use a tool such as cyberduck or winscp to copy the firmware.bin file off your pi, onto your computer.</p>
+
+    <p><img src="./images/cyberduck_example.png" alt="" /></p>
+  </li>
+  <li>Ensure that your sdcard is formatted FAT32  (NOT EXFAT!)</li>
+  <li>copy <strong>firmware.bin</strong> onto the microSD card</li>
+  <li>power off the Octopus</li>
+  <li>insert the microSD card</li>
+  <li>power on the Octopus</li>
+  <li>after a few seconds, the Octopus should be flashed.</li>
+  <li>
+    <p>you can confirm that the flash was successful, by running <code class="language-plaintext highlighter-rouge">ls /dev/serial/by-id</code>.  if the flash was successful, this should now show a klipper device, similar to:</p>
+
+    <p><img src="./images/stm32f446_id.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>(note: this test is not appicable if the firmware was compiled for UART, rather than USB)</p>
+
+<p><strong>Important:</strong> If the Octopus is not powered with 12-24V, Klipper will be unable to communicate with the TMC drivers via UART and the Octopus will automatically shut down.</p>
+
+<h4 id="option-2-dfu-firmware-install">Option 2: DFU Firmware Install</h4>
+
+<ul>
+  <li>Requires a USB connection</li>
+  <li>Requires the installation of an extra jumper on the Octopus</li>
+  <li>Does NOT require an sdcard</li>
+</ul>
+
+<ol>
+  <li>Power off Octopus</li>
+  <li>Install a jumper between BOOT0 and 3.3V</li>
+  <li>Connect Octopus &amp; Pi via USB-C</li>
+  <li>Power on Octopus</li>
+  <li>from your ssh session, run <code class="language-plaintext highlighter-rouge">lsusb</code>. and find the ID of the dfu device. The device is typically named <code class="language-plaintext highlighter-rouge">STM Device in DFU mode</code>.</li>
+  <li>If you do not see a DFU device in the list, press the reset button next to the USB connector and run <code class="language-plaintext highlighter-rouge">lsusb</code> again.</li>
+  <li>run <code class="language-plaintext highlighter-rouge">make flash FLASH_DEVICE=1234:5678</code> replace 1234:5678 with the ID from the previous step. Note that the ID is in hexadecimal, it only contains the numbers <code class="language-plaintext highlighter-rouge">0-9</code> and letters <code class="language-plaintext highlighter-rouge">A-F</code>.</li>
+  <li>power off the Octopus</li>
+  <li>remove the jumper from BOOT0 and 3.3V</li>
+  <li>Power on the Octopus</li>
+  <li>You can confirm that the flash was successful, by running <code class="language-plaintext highlighter-rouge">ls /dev/serial/by-id</code>.  if the flash was successful, this should now show a klipper device, similar to:</li>
+</ol>
+
+<p><img src="./images/stm32f446_id.png" alt="" /></p>
+
+<p>(note: this test is not appicable if the firmware was compiled for UART, rather than USB)</p>
+
+<h3 id="back-to-software-installation">Back to <a href="./index.md#klipper-octoprint-configuration">Software Installation</a></h3>
+:ET

@@ -1,0 +1,70 @@
+<h1 id="voron-v2---fysetc-spider-wiring">Voron V2 - Fysetc Spider Wiring</h1>
+
+<h2 id="initial-preparation">Initial Preparation</h2>
+
+<p>Set jumpers as shown:</p>
+
+<p><img src="./images/v2_spider_jumpering.png" alt="" /></p>
+
+<h2 id="stepper-drivers">Stepper Drivers</h2>
+<ul>
+  <li>If using Fysetc drivers, inspect for left over rosin, and clean with IPA if need</li>
+  <li>Install step drivers in all slots except E4</li>
+  <li>Install heat sinks on all step drivers</li>
+  <li><em><strong>NOTE: if the board has been powered, ensure that motor power caps are fully drained before inserting stepper drivers: Temporarily connect a 100K resistor between VMOT+ and VMOT- to safely drain the capacitors</strong></em> See <a href="https://github.com/FYSETC/FYSETC-SPIDER/blob/main/Spider%203.3v%20issue.md">Fysetc Spider 3.3v issue</a></li>
+</ul>
+
+<h2 id="wiring">Wiring</h2>
+
+<ul>
+  <li>Connect 24V Power from the PSU to PWR IN AND BED IN</li>
+  <li>Connect the B Motor (gantry left) to X-mot</li>
+  <li>Connect the A Motor (gantry right) to Y-Mot</li>
+  <li>Connect the Z, Z1, Z2, and Z3 Motors to Z-MOT, E1-MOT, E2-MOT and E3-MOT</li>
+  <li>Connect the extruder motor to E0-MOT</li>
+  <li>Connect the hot end heater to E0 OUT</li>
+  <li>Connect the chamber exhaust fan to  E2 OUT</li>
+  <li>Connect the bed SSR (DC Control Side) to BED OUT</li>
+  <li>Connect the hot end fan to FAN0</li>
+  <li>Connect the part cooling fan to FAN1</li>
+  <li>Connect the controller fans to FAN2</li>
+  <li>Connect the hot end thermistor to TE0</li>
+  <li>Connect the bed thermistor to TB</li>
+  <li>Connect the X endstop to X+</li>
+  <li>Connect the Y endstop to Y+</li>
+  <li>Connect the probe to Z+</li>
+  <li>Connect the Z endstop to Z-</li>
+  <li>if using a mini12864 display, connect to EXP1 &amp; EXP2, only after completing the steps shown <a href="#mini-12864-Display">below</a></li>
+</ul>
+
+<p><img src="./images/v2_spider_wiring.png" alt="" /></p>
+
+<h2 id="raspberry-pi">Raspberry Pi</h2>
+
+<h3 id="power">Power</h3>
+<ul>
+  <li>The spider is capable of providing 5V power to run your Raspberry pi.  To take advantage of this feature, connect the wires shown below, from the pi header of the spider, to the GPIO header of the pi.</li>
+  <li>Use at least 24awg wire for this connection.  It may be tempting to use the common “dupont” jumpers found in many electronics kits, however these jumpers typically use very small gauge wire, and will not carry enough current to run the pi.
+<img src="./images/v2_spider_pi.png" alt="" /></li>
+</ul>
+
+<h3 id="control">Control</h3>
+<ul>
+  <li>Voron Design recommends using USB to control the Spider, which simply requires connecting a USB-A to USB-C cable between the Spider and Pi.</li>
+  <li>The option does also exist to use a UART connection from the Pi header, in place of the USB.  If you prefer this option, please see the <a href="https://github.com/FYSETC/FYSETC-SPIDER/blob/main/firmware/Klipper/Connect%20RPI%20uart.md">fysetc</a> documentation</li>
+</ul>
+
+<h2 id="mini-12864-display">mini 12864 Display</h2>
+
+<ul>
+  <li><em>spider Rev 1.0 only</em>: the EXP1 &amp; EXP2 header labels are swapped. Connect  EXP1 (display) to EXP2(spider), and EXP2 (display) to EXP1 (spider).  On the Spider 1.1 or later: connect EXP1-&gt;EXP1, and EXP2-&gt;EXP2</li>
+  <li><em>Fysetc mini12864 only</em>:  components R1 and R4 must be removed from the board before connecting to the Spider.  Note: new displays are shipping with this step already complete, but this should be verified before connecting</li>
+  <li><em>BTT mini12864 only</em> remove components R1, and C6, and rotate the connectors 180 degrees</li>
+  <li>See <a href="./mini12864_klipper_guide.md">the mini12864 guide</a></li>
+</ul>
+
+<h2 id="other">Other</h2>
+<ul>
+  <li>full pinout, and other fysetc documentation is located at https://github.com/FYSETC/FYSETC-SPIDER</li>
+</ul>
+

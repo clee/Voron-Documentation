@@ -1,0 +1,39 @@
+<h1 id="filament-runout-sensor">Filament Runout Sensor</h1>
+
+<p>Klipper supports a filament runout sensor to automatically pause and resume a print if filament ends.  This guide goes through the process of setting up a Triagle Labs filament runout sensor.</p>
+
+<p><em>Note: Some other printers and sensors support jam detection with the same sensor.  That capability is not currently in Klipper.</em></p>
+
+<h2 id="hardware--wiring">Hardware / Wiring</h2>
+
+<p>The Triangle Labs filament sensor takes a 3-wire connection: 5V power, Ground, and Signal.  If using one of the common SKR boards, the 3 wires line up directly with the sensor connections.</p>
+
+<p>For V2 owners, a replacement filament guide / mount is available in the VoronUsers repository to locate the Triangle Labs sensor in the same spot as the filament guide is intended to go.</p>
+
+<p>Common MCU ports</p>
+
+<ul>
+  <li>V0 - SKR mini E3: E0-STOP (PC15)</li>
+  <li>V1 / V2 - SKR 1.3: Z+ STOP (P1.24)</li>
+  <li>V1 / V2 - SKR 1.4: E0DET (P1.26)</li>
+  <li>V2 - FLY FLYF407ZG: Z3 (PC14)</li>
+</ul>
+
+<h2 id="klipper-configuration">Klipper Configuration</h2>
+
+<p>Add the following to the printer configuration file.  Be sure to update the pin ID!</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[filament_switch_sensor my_sensor]
+pause_on_runout: True
+runout_gcode:
+    PARK_MACRO
+    M117 Out of Filament
+insert_gcode:
+    M117 Resuming
+    RESUME_MACRO
+event_delay: 3.0
+pause_delay: 0.5
+switch_pin: P1.26
+</code></pre></div></div>
+
+<p>There is no current standard for the process for how to handle parking / changing filament / resuming printing, so that is not documented here.  Check in the <a href="../../macros/index.md">macros</a> page to see if anything has been contributed.</p>
